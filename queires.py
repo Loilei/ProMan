@@ -25,7 +25,7 @@ def get_boards():
     """
     return data_manager.execute_select(
         """
-        SELECT * FROM boards
+        SELECT * FROM public_boards
         ;
         """
     )
