@@ -1,7 +1,8 @@
-from flask import Flask, render_template, url_for, session
-from util import json_response
+from flask import Flask, render_template, url_for, session, request
+from util import json_response, hash_password
 
-import queires
+
+import queries
 
 app = Flask(__name__)
 
@@ -20,7 +21,7 @@ def get_boards():
     """
     All the boards
     """
-    return queires.get_boards()
+    return queries.get_boards()
 
 
 @app.route("/get-cards/<int:board_id>")
@@ -30,7 +31,24 @@ def get_cards_for_board(board_id: int):
     All cards that belongs to a board
     :param board_id: id of the parent board
     """
-    return queires.get_cards_for_board(board_id)
+    return queries.get_cards_for_board(board_id)
+
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        username = request.form['username']
+        email = request.form['email']
+        password = request.form['password']
+        hashed_password = hash_password(password)
+        queries.save_user(username, email, hashed_password)
+
+    return render_template("registration.html")
+
+
+@app.route("/login")
+def login():
+    pass
 
 
 def main():

@@ -41,3 +41,14 @@ def get_cards_for_board(board_id):
         , {"board_id": board_id})
 
     return matching_cards
+
+
+def save_user(username, email, hashed_password):
+    data_manager.execute_update(
+    """
+    INSERT INTO users 
+    (username, email, password)
+    VALUES 
+    (%(username)s, %(email)s, %(password)s)
+    ; 
+    """, {"username": username, "email": email, "password": hashed_password})
