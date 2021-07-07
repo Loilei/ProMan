@@ -1,3 +1,5 @@
+import bcrypt
+
 import data_manager
 
 
@@ -52,3 +54,26 @@ def save_user(username, email, hashed_password):
     (%(username)s, %(email)s, %(password)s)
     ; 
     """, {"username": username, "email": email, "password": hashed_password})
+
+
+def check_user_login(email, password):
+    user_password = data_manager.execute_select(
+        """
+        SELECT password FROM users
+        WHERE email = %(email)s
+        ;
+        """
+        , {"email": email})
+
+    return bcrypt.checkpw(password.encode('UTF-8'), user_password[0]["password"].encode('UTF-8'))
+
+
+def get_session_username(email):
+    username = data_manager.execute_select(
+        """
+        SELECT username FROM users
+        WHERE email = %(email)s
+        ;
+        """
+        , {"email": email})
+    return username

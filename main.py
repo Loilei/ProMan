@@ -1,11 +1,15 @@
-from flask import Flask, render_template, url_for, session, request
+import os
+from datetime import timedelta
+
+from flask import Flask, render_template, url_for, session, request, flash, redirect
 from util import json_response, hash_password
 
 
 import queries
 
 app = Flask(__name__)
-
+app.secret_key = os.environ.get('SECRET_KEY', 'dev')
+app.permanent_session_lifetime = timedelta(days=1)
 
 @app.route("/")
 def index():
@@ -46,9 +50,21 @@ def register():
     return render_template("registration.html")
 
 
-@app.route("/login")
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    pass
+    if request.method == "POST":
+        email = request.form['email']
+        password = request.form['password']
+        if queries.check_user_login(email, password):
+            session['email'] = request.form['email']
+            session['username'] = queries.get_session_username(email)[0]["username"]
+            flash(f"You were successfully logged in, {session['username']}")
+            return redirect(url_for("index"))
+        else:
+            flash('Login failed. Try again!')
+            return redirect(url_for("index"))
+
+    return render_template("login.html")
 
 
 def main():
