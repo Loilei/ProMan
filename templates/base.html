@@ -48,8 +48,12 @@
                 </li>
             </ul>
         </div>
+        {% if 'username' in session %}
+        <a class="btn btn-outline-dark m-1" href="{{ url_for('logout') }}" role="button">Logout</a>
+        {% else %}
         <a class="btn btn-outline-dark m-1" href="{{ url_for('login') }}" role="button">Login</a>
         <a class="btn btn-secondary m-1" href="{{ url_for('register') }}" role="button">Register</a>
+        {% endif %}
     </div>
 </nav>
 

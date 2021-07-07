@@ -67,6 +67,16 @@ def login():
     return render_template("login.html")
 
 
+@app.route("/logout")
+def logout():
+    if "email" in session:
+        flash(f"You've been logged out!, {session['username']}")
+    session.pop("username", None)
+    session.pop("email", None)
+
+    return redirect(url_for("index"))
+
+
 def main():
     app.run(debug=True)
 
