@@ -76,4 +76,4 @@ def get_session_username(email):
         ;
         """
         , {"email": email})
-    return username
+    return username[0]["username"]

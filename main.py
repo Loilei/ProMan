@@ -11,7 +11,8 @@ app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'dev')
 app.permanent_session_lifetime = timedelta(days=1)
 
-@app.route("/")
+
+@app.route("/", methods=["GET", "POST"])
 def index():
     """
     This is a one-pager which shows all the boards and cards
@@ -56,10 +57,10 @@ def login():
         email = request.form['email']
         password = request.form['password']
         if queries.check_user_login(email, password):
-            session['email'] = request.form['email']
-            session['username'] = queries.get_session_username(email)[0]["username"]
+            session['email'] = email
+            session['username'] = queries.get_session_username(email)
             flash(f"You were successfully logged in, {session['username']}")
-            return redirect(url_for("index"))
+
         else:
             flash('Login failed. Try again!')
             return redirect(url_for("index"))

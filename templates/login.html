@@ -1,36 +1,61 @@
-{% extends "base.html" %}
-
-{% block title %}Login{% endblock %}
-
-{% block body %}
 <div class="container">
-        <div id="login-row" class="row justify-content-center align-items-center">
-            <div id="login-column" class="col-md-6">
-                <div class="box">
-                    <div class="shape1"></div>
-                    <div class="shape2"></div>
-                    <div class="shape3"></div>
-                    <div class="shape4"></div>
-                    <div class="shape5"></div>
-                    <div class="shape6"></div>
-                    <div class="shape7"></div>
-                    <div class="float">
-                        <form class="form" method="POST">
-                            <div class="form-group">
-                                <label for="email" class="text-white">Email:</label><br>
-                                <input type="email" name="email" id="email" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="password" class="text-white">Password:</label><br>
-                                <input type="password" name="password" id="password" class="form-control" required><br>
-                            </div>
-                            <div class="form-group">
-                                <button class ="btn btn-success" type="submit">Submit</button>
-                            </div>
-                        </form>
+
+    <div class="row justify-content-center" style="margin-top:20px">
+        <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+            <form method="POST">
+                <fieldset>
+                    <h2 class="text-black-50">Please Sign In</h2>
+                    <hr class="colorgraph">
+                    <div class="form-group">
+                        <input type="email" name="email" id="loginEmail" class="form-control input-lg"
+                               placeholder="Email Address"><br>
                     </div>
-                </div>
-            </div>
+                    <div class="form-group">
+                        <input type="password" name="password" id="loginPassword" class="form-control input-lg"
+                               placeholder="Password">
+                    </div>
+                    <hr class="colorgraph">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <button type="button" id="loginButton" class="btn btn-lg btn-success btn-block">Submit</button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
         </div>
     </div>
-{% endblock %}
+
+</div>
+
+<script>
+    $(document).ready(function(){
+        $('#loginButton').click(function(){
+            let email = $('#loginEmail').val();
+            let password = $('#loginPassword').val();
+            if( password !== '' && email !== '' )
+            {
+                $.ajax({
+                    url:"/login",
+                    method:"POST",
+                    data: {password:password, email:email},
+                    success:function(data)
+                    {
+                        if(data === 'No-data')
+                        {
+                            alert("Invalid Email Or Password!");
+                        }
+                        else
+                        {
+                            $('#loginModal').hide();
+                            location.reload();
+                        }
+                    }
+                });
+            }
+            else
+            {
+                alert("All Fields are required");
+            }
+        });
+    });
+</script>
