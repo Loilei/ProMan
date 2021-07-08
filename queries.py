@@ -41,3 +41,18 @@ def get_cards_for_board(board_id):
         , {"board_id": board_id})
 
     return matching_cards
+
+def add_new_public_board(cursor, board_title):
+    new_board = '''insert into public_boards (title) 
+                values (%s)
+                returning id; '''
+    cursor.execute(new_board, board_title)
+    return id
+    #TODO use data_manager?
+
+def rename_public_board(cursor, new_title, board_id):
+    title = """ update public_boards 
+                    set title = %s 
+                    where id= %s """
+    cursor.execute(title, new_title, board_id)
+    #TODO use data_manager
