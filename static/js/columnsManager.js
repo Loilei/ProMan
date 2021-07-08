@@ -7,7 +7,7 @@ export let boardColumnsManager = {
         const columns = await dataHandler.getStatuses();
         for (let column of columns) {
             const columnsBuilder = htmlFactory(htmlTemplates.columns);
-            const content = columnsBuilder(column);
+            const content = columnsBuilder(boardId, column);
             domManager.addChild(`.board-columns[data-board-id="${boardId}"]`, content)
         }
     }

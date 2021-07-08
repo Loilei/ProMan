@@ -38,10 +38,10 @@ function cardBuilder(card) {
             </div>`;
 }
 
-function columnsBuilder(column){
+function columnsBuilder(boardId, column){
     return `<div class="board-column">
                 <div class="board-column-title">${column.title}
-                    <div class="board-column-content" data-column-id="${column.id}"></div>
+                    <div class="board${boardId}-column-content" data-column-id="${column.id}"></div>
                 </div>
             </div>`
 }
