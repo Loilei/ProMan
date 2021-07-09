@@ -11,13 +11,18 @@ export let boardsManager = {
             const boardBuilder = htmlFactory(htmlTemplates.board);
             const content = boardBuilder(board)
             domManager.addChild("#root", content)
-            domManager.addEventListener(`.board-toggle[data-board-id="${board.id}"]`, "click", showHideButtonHandler)
+            domManager.addEventListener(`.board-toggle[data-board-id="${board.id}"]`, "click", showHideButtonHandler);
         }
     },
 }
 
 function showHideButtonHandler(clickEvent) {
     const boardId = clickEvent.target.dataset.boardId
-    boardColumnsManager.loadColumns(boardId)
-    cardsManager.loadCards(boardId)
+    if (domManager.checkParentsExistence('.card-title') === true) {
+        domManager.removeChild(`.board-columns[data-board-id="${boardId}"]`)
+    }
+    else {
+        boardColumnsManager.loadColumns(boardId);
+        cardsManager.loadCards(boardId);
+    }
 }

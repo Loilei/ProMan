@@ -12,3 +12,4 @@ export let boardColumnsManager = {
         }
     }
 }
+
