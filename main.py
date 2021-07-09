@@ -2,6 +2,7 @@ import os
 from datetime import timedelta
 
 from flask import Flask, render_template, url_for, session, request, flash, redirect
+
 from util import json_response, hash_password
 
 
@@ -76,6 +77,12 @@ def logout():
     session.pop("email", None)
 
     return redirect(url_for("index"))
+
+
+@app.route("/get_statuses")
+@json_response
+def get_statuses():
+    return queries.get_statuses()
 
 
 def main():

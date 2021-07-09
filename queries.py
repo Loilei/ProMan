@@ -77,3 +77,11 @@ def get_session_username(email):
         """
         , {"email": email})
     return username[0]["username"]
+
+
+def get_statuses():
+    return data_manager.execute_select(
+        """
+        SELECT * FROM statuses;
+        """
+    )
