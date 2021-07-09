@@ -3,7 +3,6 @@ from datetime import timedelta
 
 from flask import Flask, render_template, url_for, session, request, flash, redirect
 
-import queires
 from util import json_response, hash_password
 
 
@@ -83,7 +82,7 @@ def logout():
 @app.route("/get_statuses")
 @json_response
 def get_statuses():
-    return queires.get_statuses()
+    return queries.get_statuses()
 
 
 def main():
