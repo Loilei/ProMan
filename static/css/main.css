@@ -1,3 +1,7 @@
+#boards {
+    background-color: green;
+}
+
 :root{
     --border-radius: 3px;
     --status-1: #590000;
@@ -5,28 +9,36 @@
     --status-3: #525900;
     --status-4: #085900;
 }
+
 body{
     min-width: 620px;
     background: #ddd url(http://cdn.backgroundhost.com/backgrounds/subtlepatterns/diagonal-noise.png);
     font-family: sans-serif;
 }
 
-#boards {
-    background-color: green;
+h1, .board-title, .board-column-title{
+    font-weight: 100;
+}
+
+h1{
+    text-align: center;
+    font-size: 4em;
+    letter-spacing: 5px;
+    transform: scale(1.2, 1);
+}
+
+button{
+    background: #222;
+    color: #fff;
+    border: none;
+    font-size: 14px;
+    font-family: sans-serif;
+    padding: 4px 10px;
 }
 
 .board-container{
     max-width: 960px;
     margin: 0 auto;
-}
-
-.card{
-    position: relative;
-    background: #222;
-    color: #fff;
-    border-radius: var(--border-radius);
-    margin: 4px 0;
-    padding: 4px;
 }
 
 section.board{
@@ -47,7 +59,6 @@ section.board{
     display: inline-block;
     font-size: 20px;
 }
-
 .board-title, .board-add, .board-toggle{
     display: inline-block;
 }
@@ -55,15 +66,6 @@ section.board{
 .board-toggle{
     float: right;
     margin: 13px;
-}
-
-button{
-    background: #222;
-    color: #fff;
-    border: none;
-    font-size: 14px;
-    font-family: sans-serif;
-    padding: 4px 10px;
 }
 
 .board-columns{
@@ -90,6 +92,15 @@ button{
 
 .board-column-title{
     text-align: center;
+}
+
+.card{
+    position: relative;
+    background: #222;
+    color: #fff;
+    border-radius: var(--border-radius);
+    margin: 4px 0;
+    padding: 4px;
 }
 
 .board-column:nth-of-type(1) .card{
@@ -119,4 +130,53 @@ button{
 
 .card-title{
     padding-right: 16px;
+}
+
+.note
+{
+    text-align: center;
+    height: 80px;
+    background: -webkit-linear-gradient(left, #0072ff, #8811c5);
+    color: #fff;
+    font-weight: bold;
+    line-height: 80px;
+}
+.form-content
+{
+    padding: 5%;
+    border: 1px solid #ced4da;
+    margin-bottom: 2%;
+}
+.form-control{
+    border-radius:1.5rem;
+}
+.btnSubmit
+{
+    border:none;
+    border-radius:1.5rem;
+    padding: 1%;
+    width: 20%;
+    cursor: pointer;
+    background: #0062cc;
+    color: #fff;
+}
+
+body {
+	margin: 0;
+	color: #edf3ff;
+	background: #c8c8c8;
+	background: url(https://hdqwalls.com/download/material-design-4k-2048x1152.jpg) fixed;
+	background-size: cover;
+	font: 600 16px/18px 'Open Sans', sans-serif;
+}
+
+.colorgraph {
+  height: 10px;
+  border-top: 0;
+  background: #c4e17f;
+  border-radius: 10px;
+  background-image: -webkit-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+  background-image: -moz-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+  background-image: -o-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+  background-image: linear-gradient(to right, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
 }
