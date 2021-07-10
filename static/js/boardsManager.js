@@ -18,7 +18,7 @@ export let boardsManager = {
 
 function showHideButtonHandler(clickEvent) {
     const boardId = clickEvent.target.dataset.boardId
-    if (domManager.checkParentsExistence('.card-title') === true) {
+    if (domManager.checkParentsExistence(`.board-column[data-board-id="${boardId}"]`) === true) {
         domManager.removeChild(`.board-columns[data-board-id="${boardId}"]`)
     }
     else {
