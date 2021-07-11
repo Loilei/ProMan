@@ -27,8 +27,8 @@ export let dataHandler = {
     createNewCard: async function (cardTitle, boardId, statusId) {
         // creates new card, saves it and calls the callback function with its data
     },
-    renameColumn: async function (newTitle, columnId) {
-
+    renameColumn: async function (columnId, newTitle) {
+        await apiPut(`/rename_column/${columnId}/${newTitle}`)
     }
 };
 
@@ -49,4 +49,7 @@ async function apiDelete(url) {
 }
 
 async function apiPut(url) {
+    let response = await fetch(url, {
+        method: 'POST',
+    })
 }

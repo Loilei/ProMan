@@ -85,6 +85,12 @@ def get_statuses(board_id):
     return queries.get_statuses(board_id)
 
 
+@app.route("/rename_column/<int:column_id>/<new_title>", methods=["POST"])
+def rename_status(column_id, new_title):
+    if request.method == "POST":
+        queries.rename_status(column_id, new_title)
+
+
 def main():
     app.run(debug=True)
 

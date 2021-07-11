@@ -9,38 +9,33 @@ export let boardColumnsManager = {
             const columnsBuilder = htmlFactory(htmlTemplates.columns);
             const content = columnsBuilder(boardId, column);
             domManager.addChild(`.board-columns[data-board-id="${boardId}"]`, content)
-            domManager.addEventListener(`.board-column-title[data-board-column-title-id="board${boardId}column${column.id}"]`, 'click', renameColumn)
+            domManager.addEventListener(`.board-column-title[data-board-column-title-id="${column.id}"]`, 'click', renameColumn)
         }
     }
 }
 
 function renameColumn(clickEvent){
-    // console.log(clickEvent)
     const columnId = clickEvent.target.dataset.boardColumnTitleId
     const columnTitle = clickEvent.target.innerText
-    // console.log(columnId)
-    // console.log(`${columnTitle}`)
-
-    if (columnTitle !== "") {
-        document.querySelector(`.board-column-title[data-board-column-title-id="${columnId}"]`).innerHTML =
-            `<input id="columnTitle" type="text" class="form-control" placeholder='${columnTitle}'>
-             <input type="submit">`
-    }
-    else {
-        $(this).find('input').keypress(function (element) {
-            // Enter pressed?
-            if (element.which === 13) {
-                let newColumnTitle = this.value
+    if (columnTitle !== "") { changeTitleDiv(columnId, columnTitle) }
+    else { $(this).find('input').keypress(function (element) {
+        // Enter pressed?
+        if (element.which === 13) {
+            let newColumnTitle = this.value
+            if (newColumnTitle !== ""){
                 let columnId = clickEvent.path[1].attributes['data-board-column-title-id'].value
                 document.querySelector(`.board-column-title[data-board-column-title-id="${columnId}"]`).innerText = newColumnTitle
-
-
-                 // THIS IS TEST
-                dataHandler.renameColumn(newColumnTitle, columnId)
+                dataHandler.renameColumn(columnId, newColumnTitle)
             }
-        })
+        }
+    })
     }
     $(this).find('input[type=submit]').hide()
 }
 
+function changeTitleDiv(columnId, columnTitle){
+    document.querySelector(`.board-column-title[data-board-column-title-id="${columnId}"]`).innerHTML =
+            `<input id="columnTitle" type="text" class="form-control" placeholder='${columnTitle}'>
+             <input type="submit">`
+}
 
