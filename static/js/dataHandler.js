@@ -31,7 +31,12 @@ export let dataHandler = {
     },
 
     getLatestCardID: async function () {
-        let response = await apiGet('/get-latest-card-id')
+        let response = await apiGet(`/get-latest-card-id`)
+        return response
+    },
+
+    deleteCard: async function (cardID) {
+        let response = await apiGet(`/delete-card/${cardID}`)
         return response
     }
 }

@@ -114,3 +114,11 @@ def get_latest_card_id():
         ;
         """
     )[0]['max']
+
+
+def delete_card(card_id):
+    data_manager.execute_update(
+        """
+        DELETE from cards
+        WHERE id = %(card_id)s
+        """, {"card_id": card_id})

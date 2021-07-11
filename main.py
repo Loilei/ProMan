@@ -96,6 +96,12 @@ def get_latest_card_id():
     return queries.get_latest_card_id()
 
 
+@app.route("/delete-card/<card_id>", methods=["GET", "POST"])
+@json_response
+def delete_card(card_id):
+    return queries.delete_card(card_id)
+
+
 def main():
     app.run(debug=True)
 

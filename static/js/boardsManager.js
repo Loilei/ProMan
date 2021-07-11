@@ -41,20 +41,20 @@ async function createCard(clickEvent) {
     // domManager.addEventListener(`.card[data-card-id="${tempCard.id}"]`, "click",
     //     cardsManager.deleteButtonHandler)
 
-    let newInput = document.createElement("input");
-    newInput.setAttribute('id',tempCard.id)
-    newInput.setAttribute('type', 'text');
+    let userInput = document.createElement("input");
+    userInput.setAttribute('id',tempCard.id)
+    userInput.setAttribute('type', 'text');
     const cardIdString = "card" + tempCard.id.toString();
     const newCard = document.getElementById(cardIdString);
     newCard.removeChild(newCard.childNodes[3]);
-    newCard.appendChild(newInput);
+    newCard.appendChild(userInput);
 
-    newInput.addEventListener("keydown", function(event){
+    userInput.addEventListener("keydown", function(event){
         if (event.keyCode === 13) {
             event.preventDefault();
             const titleDiVToBeAdded = document.createElement("div")
             titleDiVToBeAdded.setAttribute("class", "card-title")
-            const titleText = newInput.value;
+            const titleText = userInput.value;
             titleDiVToBeAdded.innerHTML += titleText;
             newCard.appendChild(titleDiVToBeAdded)
             newCard.removeChild(newCard.childNodes[4])
