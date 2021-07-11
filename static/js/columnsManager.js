@@ -9,7 +9,7 @@ export let boardColumnsManager = {
             const columnsBuilder = htmlFactory(htmlTemplates.columns);
             const content = columnsBuilder(boardId, column);
             domManager.addChild(`.board-columns[data-board-id="${boardId}"]`, content)
-            domManager.addEventListener(`.board-column-title[data-board-column-title-id="${column.id}"]`, 'click', renameColumn)
+            domManager.addEventListener(`.board-column-title[data-board-column-title-id="board${boardId}column${column.id}"]`, 'click', renameColumn)
         }
     }
 }
@@ -31,9 +31,12 @@ function renameColumn(clickEvent){
             // Enter pressed?
             if (element.which === 13) {
                 let newColumnTitle = this.value
-                // console.log(newColumnTitle)
-                document.querySelector(".board-column-title").innerText = newColumnTitle
-                
+                let columnId = clickEvent.path[1].attributes['data-board-column-title-id'].value
+                document.querySelector(`.board-column-title[data-board-column-title-id="${columnId}"]`).innerText = newColumnTitle
+
+
+                 // THIS IS TEST
+
             }
         })
     }
