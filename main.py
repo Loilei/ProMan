@@ -102,6 +102,13 @@ def delete_card(card_id):
     return queries.delete_card(card_id)
 
 
+@app.route("/update-card-title/<card_id>/<new_title_text>", methods=["GET", "POST"])
+@json_response
+def update_card_title(card_id, new_title_text):
+    return queries.update_card_title(card_id, new_title_text)
+
+
+
 def main():
     app.run(debug=True)
 

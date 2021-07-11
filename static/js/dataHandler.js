@@ -38,6 +38,11 @@ export let dataHandler = {
     deleteCard: async function (cardID) {
         let response = await apiGet(`/delete-card/${cardID}`)
         return response
+    },
+
+    updateCardTitle: async function (cardID, newTitleText) {
+        let response = await apiGet(`/update-card-title/${cardID}/${newTitleText}`)
+        return response
     }
 }
 

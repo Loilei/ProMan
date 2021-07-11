@@ -122,3 +122,12 @@ def delete_card(card_id):
         DELETE from cards
         WHERE id = %(card_id)s
         """, {"card_id": card_id})
+
+
+def update_card_title(card_id, new_title_text):
+    data_manager.execute_update(
+        """
+        UPDATE cards
+        SET title = %(new_title_text)s
+        WHERE id = %(card_id)s
+        """, {"card_id": card_id, "new_title_text": new_title_text})
