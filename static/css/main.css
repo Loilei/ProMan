@@ -122,9 +122,6 @@ section.board{
 .card-remove{
     display: block;
     position: absolute;
-    width: 10px;
-    height: 10px;
-    background-color: #c8c8c8 ;
     top: 4px;
     right: 4px;
     font-size: 12px;
