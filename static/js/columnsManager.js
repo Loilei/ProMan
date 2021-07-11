@@ -36,7 +36,7 @@ function renameColumn(clickEvent){
 
 
                  // THIS IS TEST
-
+                dataHandler.renameColumn(newColumnTitle, columnId)
             }
         })
     }
