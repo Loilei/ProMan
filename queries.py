@@ -85,3 +85,40 @@ def get_statuses():
         SELECT * FROM statuses;
         """
     )
+
+
+def save_card(boardId, cardTitle, statusId):
+    max_card_order = data_manager.execute_select(
+    """
+    SELECT MAX(cards.card_order)
+    FROM cards
+    JOIN statuses
+    ON cards.status_id = statuses.id
+    WHERE cards.board_id = %(board_id)s and statuses.id = 1;
+    """, {"board_id": boardId})[0]['max']
+    max_card_order += 1
+    data_manager.execute_update(
+    """
+    INSERT INTO cards 
+    (board_id, title, status_id, card_order)
+    VALUES 
+    (%(board_id)s, %(title)s, %(status_id)s, %(card_order)s)
+    ; 
+    """, {"board_id": boardId, "title": cardTitle, "status_id": statusId, "card_order": max_card_order})
+
+
+def get_latest_card_id():
+    return data_manager.execute_select(
+        """
+        SELECT max(id) FROM cards
+        ;
+        """
+    )[0]['max']
+
+
+def delete_card(card_id):
+    data_manager.execute_update(
+        """
+        DELETE from cards
+        WHERE id = %(card_id)s
+        """, {"card_id": card_id})

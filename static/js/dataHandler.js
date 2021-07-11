@@ -3,7 +3,7 @@ export let dataHandler = {
         let response = await apiGet('/get-boards')
         return response
     },
-    getBoard: async function(boardId) {
+    getBoard: async function (boardId) {
         // the board is retrieved and then the callback function is called with the board
     },
     getStatuses: async function () {
@@ -25,9 +25,21 @@ export let dataHandler = {
         // creates new board, saves it and calls the callback function with its data
     },
     createNewCard: async function (cardTitle, boardId, statusId) {
+        let response = await apiPost(`/create-new-card/${boardId}/${cardTitle}/${statusId}`)
+        return response
         // creates new card, saves it and calls the callback function with its data
+    },
+
+    getLatestCardID: async function () {
+        let response = await apiGet(`/get-latest-card-id`)
+        return response
+    },
+
+    deleteCard: async function (cardID) {
+        let response = await apiGet(`/delete-card/${cardID}`)
+        return response
     }
-};
+}
 
 async function apiGet(url) {
     let response = await fetch(url, {
@@ -39,7 +51,10 @@ async function apiGet(url) {
     }
 }
 
-async function apiPost(url, payload) {
+async function apiPost(url) {
+    let response = await fetch(url, {
+        method: 'POST',
+    })
 }
 
 async function apiDelete(url) {
