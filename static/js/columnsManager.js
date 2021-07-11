@@ -22,14 +22,14 @@ function renameColumn(clickEvent){
         // Enter pressed?
         if (element.which === 13) {
             let newColumnTitle = this.value
-            if (newColumnTitle !== ""){
+            if (newColumnTitle === "") {
                 let columnId = clickEvent.path[1].attributes['data-board-column-title-id'].value
-                document.querySelector(`.board-column-title[data-board-column-title-id="${columnId}"]`).innerText = newColumnTitle
-                dataHandler.renameColumn(columnId, newColumnTitle)
+                returnTitleDiv(columnId)
             }
             else {
                 let columnId = clickEvent.path[1].attributes['data-board-column-title-id'].value
-                returnTitleDiv(columnId)
+                document.querySelector(`.board-column-title[data-board-column-title-id="${columnId}"]`).innerText = newColumnTitle
+                dataHandler.renameColumn(columnId, newColumnTitle)
             }
         }
     })
