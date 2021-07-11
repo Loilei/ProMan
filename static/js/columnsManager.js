@@ -27,6 +27,10 @@ function renameColumn(clickEvent){
                 document.querySelector(`.board-column-title[data-board-column-title-id="${columnId}"]`).innerText = newColumnTitle
                 dataHandler.renameColumn(columnId, newColumnTitle)
             }
+            else {
+                let columnId = clickEvent.path[1].attributes['data-board-column-title-id'].value
+                returnTitleDiv(columnId)
+            }
         }
     })
     }
@@ -39,3 +43,8 @@ function changeTitleDiv(columnId, columnTitle){
              <input type="submit">`
 }
 
+function returnTitleDiv(columnId){
+    let divTitle = document.getElementById('columnTitle').placeholder
+    document.querySelector(`.board-column-title[data-board-column-title-id="${columnId}"]`).innerHTML =
+        `<div class="board-column-title" data-board-column-title-id="${columnId}">${divTitle}</div>`
+}
