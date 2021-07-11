@@ -79,10 +79,10 @@ def logout():
     return redirect(url_for("index"))
 
 
-@app.route("/get_statuses")
+@app.route("/get_statuses/<int:board_id>")
 @json_response
-def get_statuses():
-    return queries.get_statuses()
+def get_statuses(board_id):
+    return queries.get_statuses(board_id)
 
 
 def main():

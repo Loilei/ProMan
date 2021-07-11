@@ -79,9 +79,11 @@ def get_session_username(email):
     return username[0]["username"]
 
 
-def get_statuses():
-    return data_manager.execute_select(
+def get_statuses(board_id):
+    matching_cards = data_manager.execute_select(
         """
-        SELECT * FROM statuses;
+        SELECT * FROM statuses
+        WHERE board_id = %(board_id)s;
         """
-    )
+        , {"board_id": board_id})
+    return matching_cards
