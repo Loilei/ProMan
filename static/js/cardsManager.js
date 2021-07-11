@@ -10,15 +10,14 @@ export let cardsManager = {
             const content = cardBuilder(card)
             domManager.addChild(`.board${boardId}-column-content[data-column-id="${card.status_id}"]`,
                 content)
-            domManager.addEventListener(`.card[data-card-id="${card.id}"]`, "click",
+            domManager.addEventListener(`.card-remove[id="removeCard${card.id}"]`, "click",
                 deleteButtonHandler)
         }
     },
 }
 
 function deleteButtonHandler(clickEvent) {
-    const boardId = clickEvent.target.dataset.boardId;
-    const cardToDelete = clickEvent.target;
+    const cardToDelete = clickEvent.target.parentNode;
     const cardID = cardToDelete.id.slice(10);
     cardToDelete.parentNode.remove();
     dataHandler.deleteCard(cardID);

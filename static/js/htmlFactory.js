@@ -33,7 +33,7 @@ function boardBuilder(board) {
 
 function cardBuilder(card) {
     return `<div class="card" data-card-id="${card.id}" id="card${card.id}">
-                <div class="card-remove" id="removeCard${card.id}"><i class="bi bi-trash-fill"></i></div>
+                <div class="card-remove" id="removeCard${card.id}"><i class="fas fa-trash-alt"></i></div>
                 <div class="card-title">${card.title}</div>
             </div>`;
 }
