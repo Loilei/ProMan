@@ -85,6 +85,17 @@ def get_statuses():
     return queries.get_statuses()
 
 
+@app.route("/create-new-card/<boardId>/<cardTitle>/<statusId>", methods=["GET", "POST"])
+def create_new_card(boardId, cardTitle, statusId):
+    queries.save_card(boardId, cardTitle, statusId)
+
+
+@app.route("/get-latest-card-id")
+@json_response
+def get_latest_card_id():
+    return queries.get_latest_card_id()
+
+
 def main():
     app.run(debug=True)
 
