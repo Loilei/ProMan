@@ -17,7 +17,8 @@ export let boardColumnsManager = {
 function renameColumn(clickEvent){
     const columnId = clickEvent.target.dataset.boardColumnTitleId
     const columnTitle = clickEvent.target.innerText
-    if (columnTitle !== "") { changeTitleDiv(columnId, columnTitle) }
+    const columnShowNumber = document.querySelectorAll('input').length
+    if (columnTitle !== "" && columnShowNumber === 0) { changeTitleDiv(columnId, columnTitle) }
     else { $(this).find('input').keypress(function (element) {
         // Enter pressed?
         if (element.which === 13) {
