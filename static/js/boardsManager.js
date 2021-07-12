@@ -11,18 +11,21 @@ export let boardsManager = {
             const boardBuilder = htmlFactory(htmlTemplates.board);
             const content = boardBuilder(board)
             domManager.addChild("#root", content)
-            domManager.addEventListener(`.board-toggle[data-board-id="${board.id}"]`,
-                "click", showHideButtonHandler)
-            domManager.addEventListener(`.board-add[data-board-id="${board.id}"]`,
-                "click", createCard)
+            domManager.addEventListener(`.board-toggle[data-board-id="${board.id}"]`, "click", showHideButtonHandler);
+            domManager.addEventListener(`.board-add[data-board-id="${board.id}"]`, "click", createCard)
         }
     },
 }
 
 async function showHideButtonHandler(clickEvent) {
     const boardId = clickEvent.target.dataset.boardId
-    await boardColumnsManager.loadColumns(boardId)
-    cardsManager.loadCards(boardId)
+    if (domManager.checkParentsExistence(`.board-column[data-board-id="${boardId}"]`) === true) {
+        domManager.removeChild(`.board-columns[data-board-id="${boardId}"]`)
+    }
+    else {
+        await boardColumnsManager.loadColumns(boardId);
+        cardsManager.loadCards(boardId);
+    }
 }
 
 async function createCard(clickEvent) {

@@ -79,13 +79,24 @@ def get_session_username(email):
     return username[0]["username"]
 
 
-def get_statuses():
-    return data_manager.execute_select(
+def get_statuses(board_id):
+    matching_cards = data_manager.execute_select(
         """
-        SELECT * FROM statuses;
+        SELECT * FROM statuses
+        WHERE board_id = %(board_id)s;
         """
-    )
+        , {"board_id": board_id})
+    return matching_cards
 
+
+def rename_status(column_id, new_title):
+    data_manager.execute_update(
+        """
+        UPDATE statuses
+        SET title = %(title)s
+        WHERE id = %(column_id)s
+        """, {"column_id": column_id, "title": new_title}
+    )
 
 def save_card(boardId, cardTitle, statusId):
     max_card_order = data_manager.execute_select(

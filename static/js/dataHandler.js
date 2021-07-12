@@ -6,9 +6,9 @@ export let dataHandler = {
     getBoard: async function (boardId) {
         // the board is retrieved and then the callback function is called with the board
     },
-    getStatuses: async function () {
+    getStatuses: async function (boardId) {
         // the statuses are retrieved and then the callback function is called with the statuses
-        let response = await apiGet('/get_statuses')
+        let response = await apiGet(`/get_statuses/${boardId}`)
         return response
     },
     getStatus: async function (statusId) {
@@ -43,6 +43,9 @@ export let dataHandler = {
     updateCardTitle: async function (cardID, newTitleText) {
         let response = await apiGet(`/update-card-title/${cardID}/${newTitleText}`)
         return response
+    },
+    renameColumn: async function (columnId, newTitle) {
+        await apiPut(`/rename_column/${columnId}/${newTitle}`)
     }
 }
 
@@ -66,4 +69,7 @@ async function apiDelete(url) {
 }
 
 async function apiPut(url) {
+    let response = await fetch(url, {
+        method: 'POST',
+    })
 }

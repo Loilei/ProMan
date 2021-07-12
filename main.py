@@ -79,10 +79,16 @@ def logout():
     return redirect(url_for("index"))
 
 
-@app.route("/get_statuses")
+@app.route("/get_statuses/<int:board_id>")
 @json_response
-def get_statuses():
-    return queries.get_statuses()
+def get_statuses(board_id):
+    return queries.get_statuses(board_id)
+
+
+@app.route("/rename_column/<int:column_id>/<new_title>", methods=["POST"])
+def rename_status(column_id, new_title):
+    if request.method == "POST":
+        queries.rename_status(column_id, new_title)
 
 
 @app.route("/create-new-card/<boardId>/<cardTitle>/<statusId>", methods=["GET", "POST"])
@@ -106,7 +112,6 @@ def delete_card(card_id):
 @json_response
 def update_card_title(card_id, new_title_text):
     return queries.update_card_title(card_id, new_title_text)
-
 
 
 def main():
