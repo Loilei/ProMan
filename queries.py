@@ -142,3 +142,23 @@ def update_card_title(card_id, new_title_text):
         SET title = %(new_title_text)s
         WHERE id = %(card_id)s
         """, {"card_id": card_id, "new_title_text": new_title_text})
+
+
+def get_latest_column_id():
+    return data_manager.execute_select(
+        """
+        SELECT max(id) FROM statuses
+        ;
+        """
+    )[0]['max']
+
+
+def save_column(columnId, boardId, title):
+    data_manager.execute_update(
+        """
+        INSERT INTO statuses 
+        (id, board_id, title)
+        VALUES 
+        (%(columnId)s, %(boardId)s, %(title)s)
+        ; 
+        """, {"columnId": columnId, "boardId": boardId, "title": title})

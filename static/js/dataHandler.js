@@ -46,6 +46,13 @@ export let dataHandler = {
     },
     renameColumn: async function (columnId, newTitle) {
         await apiPut(`/rename_column/${columnId}/${newTitle}`)
+    },
+    getLatestStatus: async function () {
+        let response = await apiGet(`/get-latest-column-id`)
+        return response
+    },
+    createNewColumn: async function(columnId, boardId, title){
+        await apiPost(`/create-new-column/${columnId}/${boardId}/${title}`)
     }
 }
 

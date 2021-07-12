@@ -13,6 +13,7 @@ export let boardsManager = {
             domManager.addChild("#root", content)
             domManager.addEventListener(`.board-toggle[data-board-id="${board.id}"]`, "click", showHideButtonHandler);
             domManager.addEventListener(`.board-add[data-board-id="${board.id}"]`, "click", createCard)
+            domManager.addEventListener(`.board-add[data-board-column-id="${board.id}"]`, "click", createColumn, showHideButtonHandler)
         }
     },
 }
@@ -66,3 +67,10 @@ async function createCard(clickEvent) {
     })
 }
 
+async function createColumn(clickEvent){
+    let boardId = clickEvent.target.dataset.boardColumnId;
+    let columnId = await dataHandler.getLatestStatus();
+    columnId ++;
+    let title = "New column"
+    dataHandler.createNewColumn(columnId, boardId, title)
+}

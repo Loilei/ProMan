@@ -114,6 +114,17 @@ def update_card_title(card_id, new_title_text):
     return queries.update_card_title(card_id, new_title_text)
 
 
+@app.route("/get-latest-column-id")
+@json_response
+def get_latest_column_id():
+    return queries.get_latest_column_id()
+
+
+@app.route("/create-new-column/<columnId>/<boardId>/<title>", methods=["GET", "POST"])
+def create_new_column(columnId, boardId, title):
+    queries.save_column(columnId, boardId, title)
+
+
 def main():
     app.run(debug=True)
 
