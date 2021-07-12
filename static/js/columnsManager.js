@@ -23,12 +23,9 @@ function renameColumn(clickEvent){
         // Enter pressed?
         if (element.which === 13) {
             let newColumnTitle = this.value
-            if (newColumnTitle === "") {
-                let columnId = clickEvent.path[1].attributes['data-board-column-title-id'].value
-                returnTitleDiv(columnId)
-            }
+            let columnId = clickEvent.path[1].attributes['data-board-column-title-id'].value
+            if (newColumnTitle === "") { returnTitleDiv(columnId) }
             else {
-                let columnId = clickEvent.path[1].attributes['data-board-column-title-id'].value
                 document.querySelector(`.board-column-title[data-board-column-title-id="${columnId}"]`).innerText = newColumnTitle
                 dataHandler.renameColumn(columnId, newColumnTitle)
             }
