@@ -34,25 +34,25 @@ def get_cards_for_board(board_id: int):
     return queries.get_cards_for_board(board_id)
 
 
-@app.route("/create-board", methods="GET, POST")
-#json_response?
+@app.route("/create-board", methods= ["POST"])
+@json_response
 def add_new_board():
     if request.method == "POST":
-        board_title = request.form['title']
-        id = queries.add_new_public_board(board_title)
+        print(request.json)
+        board_title = request.json['boardTitle']
+        print(board_title)
+        return queries.add_new_public_board(board_title)
 
-    else:
-        pass
 
-@app.route("/rename-board/<board_id>", methods="GET, POST")
-#json_response
-def rename_board(board_id):
-
-    if request.method == "POST":
-        new_title = request.form['title']
-        queries.rename_public_board(new_title, board_id)
-    else:
-        pass
+# @app.route("/rename-board/<board_id>", methods="GET, POST")
+# #json_response
+# def rename_board(board_id):
+#
+#     if request.method == "POST":
+#         new_title = request.form['title']
+#         queries.rename_public_board(new_title, board_id)
+#     else:
+#         pass
 
 
 def main():

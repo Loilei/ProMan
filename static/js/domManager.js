@@ -14,5 +14,14 @@ export let domManager = {
       } else {
           console.error("could not find such html element: " + parentIdentifier)
       }
+  },
+  removeAllChildren(parentIdentifier){
+      let parent = document.querySelector(parentIdentifier);
+      if (parent) {
+        parent.replaceChildren();
+      } else {
+          console.error("could not find such html element: " + parentIdentifier)
+      }
+
   }
 };
