@@ -125,6 +125,28 @@ def create_new_column(columnId, boardId, title):
     queries.save_column(columnId, boardId, title)
 
 
+
+@app.route("/create-board", methods= ["POST"])
+@json_response
+def add_new_board():
+    if request.method == "POST":
+        print(request.json)
+        board_title = request.json['boardTitle']
+        print(board_title)
+        return queries.add_new_public_board(board_title)
+
+
+# @app.route("/rename-board/<board_id>", methods="GET, POST")
+# #json_response
+# def rename_board(board_id):
+#
+#     if request.method == "POST":
+#         new_title = request.form['title']
+#         queries.rename_public_board(new_title, board_id)
+#     else:
+#         pass
+
+
 def main():
     app.run(debug=True)
 

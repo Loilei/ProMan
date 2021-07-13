@@ -8,14 +8,29 @@ export let boardsManager = {
     loadBoards: async function () {
         const boards = await dataHandler.getBoards();
         for (let board of boards) {
-            const boardBuilder = htmlFactory(htmlTemplates.board);
-            const content = boardBuilder(board)
-            domManager.addChild("#root", content)
-            domManager.addEventListener(`.board-toggle[data-board-id="${board.id}"]`, "click", showHideButtonHandler);
-            domManager.addEventListener(`.board-add[data-board-id="${board.id}"]`, "click", createCard)
-            domManager.addEventListener(`.board-add[data-board-column-id="${board.id}"]`, "click", createColumn, showHideButtonHandler)
+            buildBoard(board)
         }
     },
+    createNewBoard: async function () {
+        let boardTitle = document.getElementById("new-board-title").value;
+        let board = await dataHandler.createNewBoard({"boardTitle": boardTitle});
+        // await this.loadBoards()
+        buildBoard(board)
+    },
+}
+
+function showHideButtonHandler(clickEvent) {
+    const boardId = clickEvent.target.dataset.boardId
+    cardsManager.loadCards(boardId)
+}
+
+function buildBoard (board) {
+    const boardBuilder = htmlFactory(htmlTemplates.board);
+    const content = boardBuilder(board)
+    domManager.addChild("#root", content)
+    domManager.addEventListener(`.toggle-board-button[data-board-id="${board.id}"]`, "click", showHideButtonHandler)
+    domManager.addEventListener(`.board-add[data-board-id="${board.id}"]`, "click", createCard)
+    domManager.addEventListener(`.board-add[data-board-column-id="${board.id}"]`, "click", createColumn, showHideButtonHandler)
 }
 
 async function showHideButtonHandler(clickEvent) {
