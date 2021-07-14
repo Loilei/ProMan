@@ -52,7 +52,12 @@ export let dataHandler = {
         return response
     },
     createNewColumn: async function(columnId, boardId, title){
-        await apiPost(`/create-new-column/${columnId}/${boardId}/${title}`)
+        let response = await apiPost(`/create-new-column/${columnId}/${boardId}/${title}`)
+        return response
+    },
+    deleteColumn: async function (columnId) {
+        let response = await apiGet(`/delete-column/${columnId}`)
+        return response
     }
 }
 

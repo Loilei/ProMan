@@ -162,3 +162,25 @@ def save_column(columnId, boardId, title):
         (%(columnId)s, %(boardId)s, %(title)s)
         ; 
         """, {"columnId": columnId, "boardId": boardId, "title": title})
+
+
+def delete_column(column_id):
+    cards_exist = data_manager.execute_select(
+        """
+        SELECT * FROM cards
+        WHERE status_id = %(status_id)s
+        """, {"status_id": column_id}
+    )
+    if len(cards_exist) != 0:
+        data_manager.execute_update(
+            """
+            DELETE FROM cards
+            WHERE status_id = %(status_id)s
+            """, {"status_id": column_id}
+        )
+    data_manager.execute_update(
+        """
+        DELETE FROM statuses
+        WHERE id = %(status_id)s
+        """, {"status_id": column_id}
+    )

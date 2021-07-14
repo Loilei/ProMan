@@ -121,8 +121,15 @@ def get_latest_column_id():
 
 
 @app.route("/create-new-column/<columnId>/<boardId>/<title>", methods=["GET", "POST"])
+@json_response
 def create_new_column(columnId, boardId, title):
-    queries.save_column(columnId, boardId, title)
+    return queries.save_column(columnId, boardId, title)
+
+
+@app.route("/delete-column/<columnId>")
+@json_response
+def delete_column(columnId):
+    return queries.delete_column(columnId)
 
 
 def main():

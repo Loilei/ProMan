@@ -11,6 +11,7 @@ export let boardColumnsManager = {
             domManager.addChild(`.board-columns[data-board-id="${boardId}"]`, content)
             domManager.addEventListener(`.board-column-title[data-board-column-title-id="${column.id}"]`,
                 'click', renameColumn)
+            domManager.addEventListener(`.column-remove[id="${column.id}"]`, 'click', deleteColumn)
         }
     }
 }
@@ -44,4 +45,13 @@ function changeTitleDiv(columnId, columnTitle){
 function returnTitleDiv(columnId){
     let divTitle = document.getElementById('columnTitle').placeholder
     document.querySelector(`.board-column-title[data-board-column-title-id="${columnId}"]`).innerHTML =
-        `<div class="board-column-title" data-board-column-title-id="${columnId}">${divTitle}</div>` }
+        `<div class="board-column-title" data-board-column-title-id="${columnId}">${divTitle}
+            <div class="column-remove" id="${columnId}"><i class="fas fa-trash-alt"></i></div>
+        </div>`
+    domManager.addEventListener(`.column-remove[id="${columnId}"]`, 'click', deleteColumn)
+}
+
+function deleteColumn(clickEvent){
+    const columnId = clickEvent.path[1].attributes['id'].value
+    dataHandler.deleteColumn(columnId)
+}
