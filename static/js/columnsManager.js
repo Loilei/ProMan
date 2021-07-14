@@ -54,4 +54,5 @@ function returnTitleDiv(columnId){
 function deleteColumn(clickEvent){
     const columnId = clickEvent.path[1].attributes['id'].value
     dataHandler.deleteColumn(columnId)
+    clickEvent.path[3].hidden = true
 }
