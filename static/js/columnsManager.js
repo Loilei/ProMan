@@ -9,7 +9,8 @@ export let boardColumnsManager = {
             const columnsBuilder = htmlFactory(htmlTemplates.columns);
             const content = columnsBuilder(boardId, column);
             domManager.addChild(`.board-columns[data-board-id="${boardId}"]`, content)
-            domManager.addEventListener(`.board-column-title[data-board-column-title-id="${column.id}"]`, 'click', renameColumn)
+            domManager.addEventListener(`.board-column-title[data-board-column-title-id="${column.id}"]`,
+                'click', renameColumn)
         }
     }
 }
@@ -26,11 +27,10 @@ function renameColumn(clickEvent){
             let columnId = clickEvent.path[1].attributes['data-board-column-title-id'].value
             if (newColumnTitle === "") { returnTitleDiv(columnId) }
             else {
-                document.querySelector(`.board-column-title[data-board-column-title-id="${columnId}"]`).innerText = newColumnTitle
+                $(`.board-column-title[data-board-column-title-id="${columnId}"]`)[0].innerText = newColumnTitle
                 dataHandler.renameColumn(columnId, newColumnTitle)
             }
-        }
-    })
+        }})
     }
     $(this).find('input[type=submit]').hide()
 }
@@ -44,4 +44,4 @@ function changeTitleDiv(columnId, columnTitle){
 function returnTitleDiv(columnId){
     let divTitle = document.getElementById('columnTitle').placeholder
     document.querySelector(`.board-column-title[data-board-column-title-id="${columnId}"]`).innerHTML =
-        `<div class="board-column-title" data-board-column-title-id="${columnId}">${divTitle}</div>`}
+        `<div class="board-column-title" data-board-column-title-id="${columnId}">${divTitle}</div>` }
