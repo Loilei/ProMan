@@ -23,7 +23,7 @@ export let dataHandler = {
     },
     createNewBoard: async function (boardTitle) {
         // creates new board, saves it and calls the callback function with its data
-        let response = await apiPost("/create-board",boardTitle)
+        let response = await apiPost2("/create-board",boardTitle)
         console.log(response)
         return response
 
@@ -71,7 +71,7 @@ async function apiGet(url) {
     }
 }
 
-async function apiPost(url, payload)
+async function apiPost2(url, payload)
 { let response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -85,6 +85,13 @@ async function apiPost(url, payload)
         return data
     }
 }
+
+async function apiPost(url) {
+    let response = await fetch(url, {
+        method: 'POST',
+    })
+}
+
 
 async function apiDelete(url) {
 }

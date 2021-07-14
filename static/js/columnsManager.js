@@ -15,6 +15,7 @@ export let boardColumnsManager = {
 }
 
 function renameColumn(clickEvent){
+    console.log(clickEvent)
     const columnId = clickEvent.target.dataset.boardColumnTitleId
     const columnTitle = clickEvent.target.innerText
     const columnShowNumber = document.querySelectorAll('input').length
