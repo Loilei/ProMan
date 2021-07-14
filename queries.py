@@ -79,13 +79,24 @@ def get_session_username(email):
     return username[0]["username"]
 
 
-def get_statuses():
-    return data_manager.execute_select(
+def get_statuses(board_id):
+    matching_cards = data_manager.execute_select(
         """
-        SELECT * FROM statuses;
+        SELECT * FROM statuses
+        WHERE board_id = %(board_id)s;
         """
-    )
+        , {"board_id": board_id})
+    return matching_cards
 
+
+def rename_status(column_id, new_title):
+    data_manager.execute_update(
+        """
+        UPDATE statuses
+        SET title = %(title)s
+        WHERE id = %(column_id)s
+        """, {"column_id": column_id, "title": new_title}
+    )
 
 def save_card(boardId, cardTitle, statusId):
     max_card_order = data_manager.execute_select(
@@ -131,3 +142,45 @@ def update_card_title(card_id, new_title_text):
         SET title = %(new_title_text)s
         WHERE id = %(card_id)s
         """, {"card_id": card_id, "new_title_text": new_title_text})
+
+
+def get_latest_column_id():
+    return data_manager.execute_select(
+        """
+        SELECT max(id) FROM statuses
+        ;
+        """
+    )[0]['max']
+
+
+def save_column(columnId, boardId, title):
+    data_manager.execute_update(
+        """
+        INSERT INTO statuses 
+        (id, board_id, title)
+        VALUES 
+        (%(columnId)s, %(boardId)s, %(title)s)
+        ; 
+        """, {"columnId": columnId, "boardId": boardId, "title": title})
+
+
+def delete_column(column_id):
+    cards_exist = data_manager.execute_select(
+        """
+        SELECT * FROM cards
+        WHERE status_id = %(status_id)s
+        """, {"status_id": column_id}
+    )
+    if len(cards_exist) != 0:
+        data_manager.execute_update(
+            """
+            DELETE FROM cards
+            WHERE status_id = %(status_id)s
+            """, {"status_id": column_id}
+        )
+    data_manager.execute_update(
+        """
+        DELETE FROM statuses
+        WHERE id = %(status_id)s
+        """, {"status_id": column_id}
+    )

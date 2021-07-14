@@ -79,10 +79,16 @@ def logout():
     return redirect(url_for("index"))
 
 
-@app.route("/get_statuses")
+@app.route("/get_statuses/<int:board_id>")
 @json_response
-def get_statuses():
-    return queries.get_statuses()
+def get_statuses(board_id):
+    return queries.get_statuses(board_id)
+
+
+@app.route("/rename_column/<int:column_id>/<new_title>", methods=["POST"])
+def rename_status(column_id, new_title):
+    if request.method == "POST":
+        queries.rename_status(column_id, new_title)
 
 
 @app.route("/create-new-card/<boardId>/<cardTitle>/<statusId>", methods=["GET", "POST"])
@@ -107,6 +113,23 @@ def delete_card(card_id):
 def update_card_title(card_id, new_title_text):
     return queries.update_card_title(card_id, new_title_text)
 
+
+@app.route("/get-latest-column-id")
+@json_response
+def get_latest_column_id():
+    return queries.get_latest_column_id()
+
+
+@app.route("/create-new-column/<columnId>/<boardId>/<title>", methods=["GET", "POST"])
+@json_response
+def create_new_column(columnId, boardId, title):
+    return queries.save_column(columnId, boardId, title)
+
+
+@app.route("/delete-column/<columnId>")
+@json_response
+def delete_column(columnId):
+    return queries.delete_column(columnId)
 
 
 def main():

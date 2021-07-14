@@ -24,6 +24,7 @@ function boardBuilder(board) {
                     <div class="board-header">
                         <span class="board-title">${board.title}</span>
                         <button class="board-add" data-board-id="${board.id}">Add Card</button>
+                        <button class="board-add" data-board-column-id="${board.id}">Add new column</button>
                         <button class="board-toggle" data-board-id="${board.id}">Show Cards</button>
                     </div>
                     <div class="board-columns" data-board-id="${board.id}"></div>
@@ -39,9 +40,10 @@ function cardBuilder(card) {
 }
 
 function columnsBuilder(boardId, column){
-    return `<div class="board-column" id="column${column.id}">
-                <div class="board-column-title">${column.title}
-                    <div class="board${boardId}-column-content" data-column-id="${column.id}"></div>
+    return `<div class="board-column" data-board-id="${boardId}">
+                <div class="board-column-title" data-board-column-title-id="${column.id}">${column.title}
+                <div class="column-remove" id="${column.id}"><i class="fas fa-trash-alt"></i></div>
                 </div>
+                <div class="board-column-content" data-column-id="${column.id}"></div>
             </div>`
 }
