@@ -38,6 +38,7 @@ def get_cards_for_board(board_id):
         """
         SELECT * FROM cards
         WHERE cards.board_id = %(board_id)s
+        ORDER BY card_order
         ;
         """
         , {"board_id": board_id})
@@ -82,7 +83,8 @@ def get_session_username(email):
 def get_statuses():
     return data_manager.execute_select(
         """
-        SELECT * FROM statuses;
+        SELECT * FROM statuses
+        ORDER BY id;
         """
     )
 
@@ -131,3 +133,12 @@ def update_card_title(card_id, new_title_text):
         SET title = %(new_title_text)s
         WHERE id = %(card_id)s
         """, {"card_id": card_id, "new_title_text": new_title_text})
+
+
+def update_card_position(card_id, card_order, column_id):
+    data_manager.execute_update(
+        """
+        UPDATE cards
+        SET card_order = %(card_order)s, status_id = %(column_id)s
+        WHERE id = %(card_id)s
+        """, {"card_id": card_id, "card_order": card_order, "column_id": column_id})

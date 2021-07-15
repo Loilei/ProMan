@@ -1,7 +1,7 @@
 import { dataHandler } from "./dataHandler.js";
 import { htmlFactory, htmlTemplates } from "./htmlFactory.js";
 import { domManager } from "./domManager.js";
-import { cardsManager } from "./cardsManager.js";
+import { cardsManager, deleteButtonHandler, movingCards } from "./cardsManager.js";
 import { boardColumnsManager } from "./columnsManager.js";
 
 export let boardsManager = {
@@ -20,9 +20,21 @@ export let boardsManager = {
 }
 
 async function showHideButtonHandler(clickEvent) {
-    const boardId = clickEvent.target.dataset.boardId
-    await boardColumnsManager.loadColumns(boardId)
-    cardsManager.loadCards(boardId)
+    let columnsTag = clickEvent.target.parentElement.nextElementSibling;
+    if (columnsTag.hasChildNodes() === false) {
+        const boardId = clickEvent.target.dataset.boardId;
+        await boardColumnsManager.loadColumns(boardId);
+        await cardsManager.loadCards(boardId);
+        movingCards();
+    } else {
+        removeAllChildNodes(columnsTag);
+    }
+}
+
+function removeAllChildNodes(parent) {
+    while (parent.firstChild) {
+        parent.removeChild(parent.firstChild);
+    }
 }
 
 async function createCard(clickEvent) {
@@ -38,8 +50,8 @@ async function createCard(clickEvent) {
     const content = cardBuilder(tempCard);
     domManager.addChild(`.board${boardId}-column-content[data-column-id="${tempCard.status_id}"]`,
                 content)
-    // domManager.addEventListener(`.card[data-card-id="${tempCard.id}"]`, "click",
-    //     cardsManager.deleteButtonHandler)
+    domManager.addEventListener(`.card-remove[id="removeCard${tempCard.id}"]`,
+                "click", deleteButtonHandler);
 
     let userInput = document.createElement("input");
     userInput.setAttribute('id',tempCard.id)

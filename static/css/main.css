@@ -63,6 +63,10 @@ section.board{
     display: inline-block;
 }
 
+.board-title {
+    color: #222222;
+}
+
 .board-toggle{
     float: right;
     margin: 13px;
@@ -101,6 +105,7 @@ section.board{
     border-radius: var(--border-radius);
     margin: 4px 0;
     padding: 4px;
+    cursor: move;
 }
 
 .board-column:nth-of-type(1) .card{
@@ -130,6 +135,7 @@ section.board{
 
 .card-title{
     padding-right: 16px;
+    cursor: text;
 }
 
 .note
@@ -179,4 +185,8 @@ body {
   background-image: -moz-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
   background-image: -o-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
   background-image: linear-gradient(to right, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+}
+
+card.dragging{
+    opacity: .5;
 }
