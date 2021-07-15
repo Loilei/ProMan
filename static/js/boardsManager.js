@@ -12,9 +12,11 @@ export let boardsManager = {
             const content = boardBuilder(board)
             domManager.addChild("#root", content)
             domManager.addEventListener(`.board-toggle[data-board-id="${board.id}"]`,
-                "click", showHideButtonHandler)
+                "click", showHideButtonHandler);
             domManager.addEventListener(`.board-add[data-board-id="${board.id}"]`,
                 "click", createCard)
+            domManager.addEventListener(`.board-add[data-board-column-id="${board.id}"]`,
+                "click", createColumn)
         }
     },
 }
@@ -33,9 +35,10 @@ async function showHideButtonHandler(clickEvent) {
 
 function removeAllChildNodes(parent) {
     while (parent.firstChild) {
-        parent.removeChild(parent.firstChild);
+        parent.removeChild(parent.firstChild)
     }
 }
+
 
 async function createCard(clickEvent) {
     const boardId = clickEvent.target.dataset.boardId;
@@ -75,3 +78,21 @@ async function createCard(clickEvent) {
     })
 }
 
+async function createColumn(clickEvent){
+    let boardId = clickEvent.target.dataset.boardColumnId;
+    let columnId = await dataHandler.getLatestStatus();
+    columnId ++;
+    let title = "New_column"
+    await dataHandler.createNewColumn(columnId, boardId, title)
+    // showBoardWithNewColumn(boardId)
+}
+
+async function showBoardWithNewColumn(boardId){
+    if (domManager.checkParentsExistence(`.board-column[data-board-id="${boardId}"]`) === true) {
+        domManager.removeChild(`.board-columns[data-board-id="${boardId}"]`)
+    }
+    else {
+        await boardColumnsManager.loadColumns(boardId);
+        await cardsManager.loadCards(boardId);
+    }
+}

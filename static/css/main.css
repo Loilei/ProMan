@@ -190,3 +190,7 @@ body {
 card.dragging{
     opacity: .5;
 }
+
+.column-remove{
+    cursor: pointer;
+}

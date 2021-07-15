@@ -80,14 +80,28 @@ def get_session_username(email):
     return username[0]["username"]
 
 
-def get_statuses():
-    return data_manager.execute_select(
+def get_statuses(board_id):
+    matching_cards = data_manager.execute_select(
         """
         SELECT * FROM statuses
+<<<<<<< HEAD
         ORDER BY id;
+=======
+        WHERE board_id = %(board_id)s;
+>>>>>>> 3d04280b5dc31e4e792e895c75c4c3d8cdae9606
         """
-    )
+        , {"board_id": board_id})
+    return matching_cards
 
+
+def rename_status(column_id, new_title):
+    data_manager.execute_update(
+        """
+        UPDATE statuses
+        SET title = %(title)s
+        WHERE id = %(column_id)s
+        """, {"column_id": column_id, "title": new_title}
+    )
 
 def save_card(boardId, cardTitle, statusId):
     max_card_order = data_manager.execute_select(
@@ -142,3 +156,45 @@ def update_card_position(card_id, card_order, column_id):
         SET card_order = %(card_order)s, status_id = %(column_id)s
         WHERE id = %(card_id)s
         """, {"card_id": card_id, "card_order": card_order, "column_id": column_id})
+
+
+def get_latest_column_id():
+    return data_manager.execute_select(
+        """
+        SELECT max(id) FROM statuses
+        ;
+        """
+    )[0]['max']
+
+
+def save_column(columnId, boardId, title):
+    data_manager.execute_update(
+        """
+        INSERT INTO statuses 
+        (id, board_id, title)
+        VALUES 
+        (%(columnId)s, %(boardId)s, %(title)s)
+        ; 
+        """, {"columnId": columnId, "boardId": boardId, "title": title})
+
+
+def delete_column(column_id):
+    cards_exist = data_manager.execute_select(
+        """
+        SELECT * FROM cards
+        WHERE status_id = %(status_id)s
+        """, {"status_id": column_id}
+    )
+    if len(cards_exist) != 0:
+        data_manager.execute_update(
+            """
+            DELETE FROM cards
+            WHERE status_id = %(status_id)s
+            """, {"status_id": column_id}
+        )
+    data_manager.execute_update(
+        """
+        DELETE FROM statuses
+        WHERE id = %(status_id)s
+        """, {"status_id": column_id}
+    )

@@ -6,9 +6,9 @@ export let dataHandler = {
     getBoard: async function (boardId) {
         // the board is retrieved and then the callback function is called with the board
     },
-    getStatuses: async function () {
+    getStatuses: async function (boardId) {
         // the statuses are retrieved and then the callback function is called with the statuses
-        let response = await apiGet('/get_statuses')
+        let response = await apiGet(`/get_statuses/${boardId}`)
         return response
     },
     getStatus: async function (statusId) {
@@ -49,13 +49,29 @@ export let dataHandler = {
     },
 
     updateCardPosition: async function (cardNumber, cardId, columnId) {
-    let bodyContent = {
+        let bodyContent = {
         "card_id": cardId,
         "card_order": cardNumber,
         "column_id": columnId
     }
-    let response = await apiPut(`/update-card-position`, bodyContent)
-}
+        let response = await apiPut(`/update-card-position`, bodyContent)
+
+    },
+    renameColumn: async function (columnId, newTitle) {
+        await apiPut(`/rename_column/${columnId}/${newTitle}`)
+    },
+    getLatestStatus: async function () {
+        let response = await apiGet(`/get-latest-column-id`)
+        return response
+    },
+    createNewColumn: async function(columnId, boardId, title){
+        let response = await apiPost(`/create-new-column/${columnId}/${boardId}/${title}`)
+        return response
+    },
+    deleteColumn: async function (columnId) {
+        let response = await apiGet(`/delete-column/${columnId}`)
+        return response
+    }
 }
 
 async function apiGet(url) {
@@ -83,6 +99,7 @@ async function apiDelete(url) {
         method: 'DELETE',
     })
 }
+
 
 async function apiPut(url, body_content) {
     let response = await fetch(url, {
