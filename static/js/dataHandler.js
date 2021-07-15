@@ -58,6 +58,10 @@ export let dataHandler = {
     deleteColumn: async function (columnId) {
         let response = await apiGet(`/delete-column/${columnId}`)
         return response
+    },
+    deleteBoard: async function (boardId) {
+        let response = await apiGet(`/delete-board/${boardId}`)
+        return response
     }
 }
 

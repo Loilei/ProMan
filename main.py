@@ -120,16 +120,22 @@ def get_latest_column_id():
     return queries.get_latest_column_id()
 
 
-@app.route("/create-new-column/<columnId>/<boardId>/<title>", methods=["GET", "POST"])
+@app.route("/create-new-column/<columnId>/<board_id>/<title>", methods=["GET", "POST"])
 @json_response
-def create_new_column(columnId, boardId, title):
-    return queries.save_column(columnId, boardId, title)
+def create_new_column(columnId, board_id, title):
+    return queries.save_column(columnId, board_id, title)
 
 
-@app.route("/delete-column/<columnId>")
+@app.route("/delete-column/<column_id>")
 @json_response
-def delete_column(columnId):
-    return queries.delete_column(columnId)
+def delete_column(column_id):
+    return queries.delete_column(column_id)
+
+
+@app.route("/delete-board/<board_id>")
+@json_response
+def delete_board(board_id):
+    return queries.delete_public_board(board_id)
 
 
 def main():
