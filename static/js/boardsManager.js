@@ -65,16 +65,16 @@ async function createCard(clickEvent) {
     newCard.removeChild(newCard.childNodes[3]);
     newCard.appendChild(userInput);
 
-    userInput.addEventListener("keydown", function(event){
+    userInput.addEventListener("keydown", async function (event) {
         if (event.keyCode === 13) {
             event.preventDefault();
-            const titleDiVToBeAdded = document.createElement("div")
+            const titleDiVToBeAdded = document.createElement("div");
             titleDiVToBeAdded.setAttribute("class", "card-title")
             const titleText = userInput.value;
             titleDiVToBeAdded.innerHTML += titleText;
-            newCard.appendChild(titleDiVToBeAdded)
-            newCard.removeChild(newCard.childNodes[4])
-            dataHandler.createNewCard(titleText, boardId, tempCard.status_id)
+            newCard.appendChild(titleDiVToBeAdded);
+            newCard.removeChild(newCard.childNodes[4]);
+            await dataHandler.createNewCard(titleText, boardId, tempCard.status_id);
         } else if (event.keyCode === 27) {
             newCard.outerHTML = "";
         }

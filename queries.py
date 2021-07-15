@@ -48,13 +48,13 @@ def get_cards_for_board(board_id):
 
 def save_user(username, email, hashed_password):
     data_manager.execute_update(
-    """
-    INSERT INTO users 
-    (username, email, password)
-    VALUES 
-    (%(username)s, %(email)s, %(password)s)
-    ; 
-    """, {"username": username, "email": email, "password": hashed_password})
+        """
+        INSERT INTO users 
+        (username, email, password)
+        VALUES 
+        (%(username)s, %(email)s, %(password)s)
+        ; 
+        """, {"username": username, "email": email, "password": hashed_password})
 
 
 def check_user_login(email, password):
@@ -101,24 +101,26 @@ def rename_status(column_id, new_title):
     )
 
 
-def save_card(boardId, cardTitle, statusId):
+def is_board_empty(column_id, board_id):
     max_card_order = data_manager.execute_select(
         """
         SELECT MAX(cards.card_order)
         FROM cards
         JOIN statuses
         ON cards.status_id = statuses.id
-        WHERE cards.board_id = %(board_id)s and statuses.id = 1;
-        """, {"board_id": boardId})[0]['max']
-    max_card_order += 1
+        WHERE cards.board_id = %(board_id)s and statuses.id = %(column_id)s;
+        """, {"board_id": board_id, "column_id": column_id})[0]['max']
+    return max_card_order
 
+
+def save_card(title, column_id, board_id, card_number):
     data_manager.execute_update(
         """
         INSERT INTO cards 
         (board_id, title, status_id, card_order)
         VALUES 
         (%(board_id)s, %(title)s, %(status_id)s, %(card_order)s); 
-        """, {"board_id": boardId, "title": cardTitle, "status_id": statusId, "card_order": max_card_order})
+        """, {"board_id": board_id, "title": title, "status_id": column_id, "card_order": card_number})
 
 
 def get_latest_card_id():

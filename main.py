@@ -93,9 +93,16 @@ def rename_status():
     queries.rename_status(column_id, new_title)
 
 
-@app.route("/create-new-card/<boardId>/<cardTitle>/<statusId>", methods=["GET", "POST"])
-def create_new_card(boardId, cardTitle, statusId):
-    queries.save_card(boardId, cardTitle, statusId)
+@app.route("/create-new-card", methods=["POST"])
+def create_new_card():
+    data = request.get_json()
+    title = data["title"]
+    column_id = data["column_id"]
+    board_id = data["board_id"]
+    card_number = queries.is_board_empty(column_id, board_id)
+    if card_number == None:
+        card_number = 1
+    queries.save_card(title, column_id, board_id, card_number)
 
 
 @app.route("/get-latest-card-id")
