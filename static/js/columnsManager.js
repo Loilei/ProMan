@@ -16,22 +16,24 @@ export let boardColumnsManager = {
     }
 }
 
-function renameColumn(clickEvent){
-    const columnId = clickEvent.target.dataset.boardColumnTitleId
-    const columnTitle = clickEvent.target.innerText
-    const columnShowNumber = document.querySelectorAll('input').length
+async function renameColumn(clickEvent){
+    const columnId = clickEvent.target.dataset.boardColumnTitleId;
+    const columnTitle = clickEvent.target.innerText;
+    const columnShowNumber = document.querySelectorAll('input').length;
     if (columnTitle !== "" && columnShowNumber === 0) { changeTitleDiv(columnId, columnTitle) }
-    else { $(this).find('input').keypress(function (element) {
+    else { $(this).find('input').keypress(async function (element) {
         // Enter pressed?
         if (element.which === 13) {
-            let newColumnTitle = this.value
-            let columnId = clickEvent.path[1].attributes['data-board-column-title-id'].value
-            if (newColumnTitle === "") { returnTitleDiv(columnId) }
-            else {
+            let newColumnTitle = this.value;
+            let columnId = clickEvent.path[1].attributes['data-board-column-title-id'].value;
+            if (newColumnTitle === "") {
+                returnTitleDiv(columnId)
+            } else {
                 $(`.board-column-title[data-board-column-title-id="${columnId}"]`)[0].innerText = newColumnTitle
-                dataHandler.renameColumn(columnId, newColumnTitle)
+                await dataHandler.renameColumn(columnId, newColumnTitle)
             }
-        }})
+        }
+    })
     }
     $(this).find('input[type=submit]').hide()
 }

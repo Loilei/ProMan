@@ -103,22 +103,22 @@ def rename_status(column_id, new_title):
 
 def save_card(boardId, cardTitle, statusId):
     max_card_order = data_manager.execute_select(
-    """
-    SELECT MAX(cards.card_order)
-    FROM cards
-    JOIN statuses
-    ON cards.status_id = statuses.id
-    WHERE cards.board_id = %(board_id)s and statuses.id = 1;
-    """, {"board_id": boardId})[0]['max']
+        """
+        SELECT MAX(cards.card_order)
+        FROM cards
+        JOIN statuses
+        ON cards.status_id = statuses.id
+        WHERE cards.board_id = %(board_id)s and statuses.id = 1;
+        """, {"board_id": boardId})[0]['max']
     max_card_order += 1
+
     data_manager.execute_update(
-    """
-    INSERT INTO cards 
-    (board_id, title, status_id, card_order)
-    VALUES 
-    (%(board_id)s, %(title)s, %(status_id)s, %(card_order)s)
-    ; 
-    """, {"board_id": boardId, "title": cardTitle, "status_id": statusId, "card_order": max_card_order})
+        """
+        INSERT INTO cards 
+        (board_id, title, status_id, card_order)
+        VALUES 
+        (%(board_id)s, %(title)s, %(status_id)s, %(card_order)s); 
+        """, {"board_id": boardId, "title": cardTitle, "status_id": statusId, "card_order": max_card_order})
 
 
 def get_latest_card_id():
@@ -196,3 +196,17 @@ def delete_column(column_id):
         WHERE id = %(status_id)s
         """, {"status_id": column_id}
     )
+
+
+def get_first_column_from_board(board_id):
+    user_username = data_manager.execute_select(
+        """
+        SELECT id
+        FROM statuses
+        WHERE board_id = %(board_id)s
+        ORDER BY column_order
+        LIMIT 1
+        ;
+        """, {"board_id": board_id})
+
+    return user_username[0]['id']

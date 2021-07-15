@@ -85,10 +85,12 @@ def get_statuses(board_id):
     return queries.get_statuses(board_id)
 
 
-@app.route("/rename_column/<int:column_id>/<new_title>", methods=["POST"])
-def rename_status(column_id, new_title):
-    if request.method == "POST":
-        queries.rename_status(column_id, new_title)
+@app.route("/rename_column", methods=["PUT"])
+def rename_status():
+    data = request.get_json()
+    column_id = data["column_id"]
+    new_title = data["title"]
+    queries.rename_status(column_id, new_title)
 
 
 @app.route("/create-new-card/<boardId>/<cardTitle>/<statusId>", methods=["GET", "POST"])
@@ -124,6 +126,7 @@ def update_card_position():
     column_id = data["column_id"]
     queries.update_card_position(card_id, card_order, column_id)
 
+
 @app.route("/get-latest-column-id")
 @json_response
 def get_latest_column_id():
@@ -140,6 +143,12 @@ def create_new_column(columnId, boardId, title):
 @json_response
 def delete_column(columnId):
     return queries.delete_column(columnId)
+
+
+@app.route("/get-first-column-from-board/<board_id>")
+@json_response
+def get_first_column_from_board(board_id):
+    return queries.get_first_column_from_board(board_id)
 
 
 def main():

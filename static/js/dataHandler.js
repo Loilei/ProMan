@@ -57,9 +57,14 @@ export let dataHandler = {
         let response = await apiPut(`/update-card-position`, bodyContent)
 
     },
-    renameColumn: async function (columnId, newTitle) {
-        await apiPut(`/rename_column/${columnId}/${newTitle}`)
+    renameColumn: async function (columnId, newColumnTitle) {
+        let bodyContent = {
+        "title": newColumnTitle,
+        "column_id": columnId
+        }
+        let response = await apiPut(`/rename_column`, bodyContent)
     },
+
     getLatestStatus: async function () {
         let response = await apiGet(`/get-latest-column-id`)
         return response
@@ -71,7 +76,12 @@ export let dataHandler = {
     deleteColumn: async function (columnId) {
         let response = await apiGet(`/delete-column/${columnId}`)
         return response
-    }
+    },
+    getFirstColumnFromBoard: async function (boardId) {
+        let response = await apiGet(`/get-first-column-from-board/${boardId}`);
+        return response
+    },
+
 }
 
 async function apiGet(url) {
