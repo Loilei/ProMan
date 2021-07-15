@@ -108,11 +108,21 @@ def delete_card(card_id):
     return queries.delete_card(card_id)
 
 
-@app.route("/update-card-title/<card_id>/<new_title_text>", methods=["GET", "POST"])
-@json_response
-def update_card_title(card_id, new_title_text):
-    return queries.update_card_title(card_id, new_title_text)
+@app.route("/update-card-title", methods=["PUT"])
+def update_card_title():
+    data = request.get_json()
+    card_id = data["card_id"]
+    new_title_text = data["new_title_text"]
+    queries.update_card_title(card_id, new_title_text)
 
+
+@app.route("/update-card-position", methods=["PUT"])
+def update_card_position():
+    data = request.get_json()
+    card_id = data["card_id"]
+    card_order = data["card_order"]
+    column_id = data["column_id"]
+    queries.update_card_position(card_id, card_order, column_id)
 
 @app.route("/get-latest-column-id")
 @json_response

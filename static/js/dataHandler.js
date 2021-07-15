@@ -41,8 +41,21 @@ export let dataHandler = {
     },
 
     updateCardTitle: async function (cardID, newTitleText) {
-        let response = await apiGet(`/update-card-title/${cardID}/${newTitleText}`)
-        return response
+        let bodyContent = {
+            "card_id": cardID,
+            "new_title_text": newTitleText
+        }
+        let response = await apiPut(`/update-card-title`, bodyContent)
+    },
+
+    updateCardPosition: async function (cardNumber, cardId, columnId) {
+        let bodyContent = {
+        "card_id": cardId,
+        "card_order": cardNumber,
+        "column_id": columnId
+    }
+        let response = await apiPut(`/update-card-position`, bodyContent)
+
     },
     renameColumn: async function (columnId, newTitle) {
         await apiPut(`/rename_column/${columnId}/${newTitle}`)
@@ -71,17 +84,29 @@ async function apiGet(url) {
     }
 }
 
-async function apiPost(url) {
+async function apiPost(url, body_content) {
     let response = await fetch(url, {
         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body_content),
     })
 }
 
 async function apiDelete(url) {
+    let response = await fetch(url, {
+        method: 'DELETE',
+    })
 }
 
-async function apiPut(url) {
+
+async function apiPut(url, body_content) {
     let response = await fetch(url, {
-        method: 'POST',
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body_content),
     })
 }
