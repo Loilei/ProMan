@@ -25,9 +25,13 @@ export let dataHandler = {
         // creates new board, saves it and calls the callback function with its data
     },
     createNewCard: async function (cardTitle, boardId, statusId) {
-        let response = await apiPost(`/create-new-card/${boardId}/${cardTitle}/${statusId}`)
+        let bodyContent = {
+        "title": cardTitle,
+        "column_id": statusId,
+        "board_id": boardId,
+        }
+        let response = await apiPost(`/create-new-card`, bodyContent)
         return response
-        // creates new card, saves it and calls the callback function with its data
     },
 
     getLatestCardID: async function () {
