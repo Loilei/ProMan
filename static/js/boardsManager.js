@@ -44,10 +44,11 @@ async function createCard(clickEvent) {
     const boardId = clickEvent.target.dataset.boardId;
     let cardID = await dataHandler.getLatestCardID();
     cardID ++
+    let columnId = await dataHandler.getFirstColumnFromBoard(boardId);
     const tempCard = {
         title: "title",
         id: cardID,
-        status_id: 1
+        status_id: columnId
     };
     const cardBuilder = htmlFactory(htmlTemplates.card);
     const content = cardBuilder(tempCard);
@@ -74,6 +75,8 @@ async function createCard(clickEvent) {
             newCard.appendChild(titleDiVToBeAdded)
             newCard.removeChild(newCard.childNodes[4])
             dataHandler.createNewCard(titleText, boardId, tempCard.status_id)
+        } else if (event.keyCode === 27) {
+            newCard.outerHTML = "";
         }
     })
 }
