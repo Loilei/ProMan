@@ -84,11 +84,8 @@ def get_statuses(board_id):
     matching_cards = data_manager.execute_select(
         """
         SELECT * FROM statuses
-<<<<<<< HEAD
+        WHERE board_id = %(board_id)s
         ORDER BY id;
-=======
-        WHERE board_id = %(board_id)s;
->>>>>>> 3d04280b5dc31e4e792e895c75c4c3d8cdae9606
         """
         , {"board_id": board_id})
     return matching_cards
@@ -102,6 +99,7 @@ def rename_status(column_id, new_title):
         WHERE id = %(column_id)s
         """, {"column_id": column_id, "title": new_title}
     )
+
 
 def save_card(boardId, cardTitle, statusId):
     max_card_order = data_manager.execute_select(
