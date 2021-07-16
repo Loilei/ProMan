@@ -25,7 +25,12 @@ export let dataHandler = {
         // creates new board, saves it and calls the callback function with its data
     },
     createNewCard: async function (cardTitle, boardId, statusId) {
-        let response = await apiPost(`/create-new-card/${boardId}/${cardTitle}/${statusId}`)
+        let bodyContent = {
+        "title": cardTitle,
+        "column_id": statusId,
+        "board_id": boardId,
+        }
+        let response = await apiPost(`/create-new-card`, bodyContent)
         return response
         // creates new card, saves it and calls the callback function with its data
     },
@@ -41,12 +46,30 @@ export let dataHandler = {
     },
 
     updateCardTitle: async function (cardID, newTitleText) {
-        let response = await apiGet(`/update-card-title/${cardID}/${newTitleText}`)
-        return response
+        let bodyContent = {
+            "card_id": cardID,
+            "new_title_text": newTitleText
+        }
+        let response = await apiPut(`/update-card-title`, bodyContent)
     },
-    renameColumn: async function (columnId, newTitle) {
-        await apiPut(`/rename_column/${columnId}/${newTitle}`)
+
+    updateCardPosition: async function (cardNumber, cardId, columnId) {
+        let bodyContent = {
+        "card_id": cardId,
+        "card_order": cardNumber,
+        "column_id": columnId
+    }
+        let response = await apiPut(`/update-card-position`, bodyContent)
+
     },
+    renameColumn: async function (columnId, newColumnTitle) {
+        let bodyContent = {
+        "title": newColumnTitle,
+        "column_id": columnId
+        }
+        let response = await apiPut(`/rename_column`, bodyContent)
+    },
+
     getLatestStatus: async function () {
         let response = await apiGet(`/get-latest-column-id`)
         return response
@@ -57,6 +80,10 @@ export let dataHandler = {
     },
     deleteColumn: async function (columnId) {
         let response = await apiGet(`/delete-column/${columnId}`)
+        return response
+    },
+    getFirstColumnFromBoard: async function (boardId) {
+        let response = await apiGet(`/get-first-column-from-board/${boardId}`);
         return response
     },
     deleteBoard: async function (boardId) {
@@ -75,17 +102,29 @@ async function apiGet(url) {
     }
 }
 
-async function apiPost(url) {
+async function apiPost(url, body_content) {
     let response = await fetch(url, {
         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body_content),
     })
 }
 
 async function apiDelete(url) {
+    let response = await fetch(url, {
+        method: 'DELETE',
+    })
 }
 
-async function apiPut(url) {
+
+async function apiPut(url, body_content) {
     let response = await fetch(url, {
-        method: 'POST',
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body_content),
     })
 }

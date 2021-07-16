@@ -85,15 +85,24 @@ def get_statuses(board_id):
     return queries.get_statuses(board_id)
 
 
-@app.route("/rename_column/<int:column_id>/<new_title>", methods=["POST"])
-def rename_status(column_id, new_title):
-    if request.method == "POST":
-        queries.rename_status(column_id, new_title)
+@app.route("/rename_column", methods=["PUT"])
+def rename_status():
+    data = request.get_json()
+    column_id = data["column_id"]
+    new_title = data["title"]
+    queries.rename_status(column_id, new_title)
 
 
-@app.route("/create-new-card/<boardId>/<cardTitle>/<statusId>", methods=["GET", "POST"])
-def create_new_card(boardId, cardTitle, statusId):
-    queries.save_card(boardId, cardTitle, statusId)
+@app.route("/create-new-card", methods=["POST"])
+def create_new_card():
+    data = request.get_json()
+    title = data["title"]
+    column_id = data["column_id"]
+    board_id = data["board_id"]
+    card_number = queries.is_board_empty(column_id, board_id)
+    if card_number == None:
+        card_number = 1
+    queries.save_card(title, column_id, board_id, card_number)
 
 
 @app.route("/get-latest-card-id")
@@ -108,10 +117,21 @@ def delete_card(card_id):
     return queries.delete_card(card_id)
 
 
-@app.route("/update-card-title/<card_id>/<new_title_text>", methods=["GET", "POST"])
-@json_response
-def update_card_title(card_id, new_title_text):
-    return queries.update_card_title(card_id, new_title_text)
+@app.route("/update-card-title", methods=["PUT"])
+def update_card_title():
+    data = request.get_json()
+    card_id = data["card_id"]
+    new_title_text = data["new_title_text"]
+    queries.update_card_title(card_id, new_title_text)
+
+
+@app.route("/update-card-position", methods=["PUT"])
+def update_card_position():
+    data = request.get_json()
+    card_id = data["card_id"]
+    card_order = data["card_order"]
+    column_id = data["column_id"]
+    queries.update_card_position(card_id, card_order, column_id)
 
 
 @app.route("/get-latest-column-id")
@@ -136,6 +156,12 @@ def delete_column(column_id):
 @json_response
 def delete_board(board_id):
     return queries.delete_public_board(board_id)
+
+
+@app.route("/get-first-column-from-board/<board_id>")
+@json_response
+def get_first_column_from_board(board_id):
+    return queries.get_first_column_from_board(board_id)
 
 
 def main():
