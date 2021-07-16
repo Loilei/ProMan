@@ -89,17 +89,15 @@ async function createColumn(clickEvent){
     columnId ++;
     let title = "New_column"
     await dataHandler.createNewColumn(columnId, boardId, title)
-    // showBoardWithNewColumn(boardId)
+    showBoardWithNewColumn(boardId)
 }
 
 async function showBoardWithNewColumn(boardId){
-    if (domManager.checkParentsExistence(`.board-column[data-board-id="${boardId}"]`) === true) {
-        domManager.removeChild(`.board-columns[data-board-id="${boardId}"]`)
-    }
-    else {
-        await boardColumnsManager.loadColumns(boardId);
-        await cardsManager.loadCards(boardId);
-    }
+    let columnsArea = $(`.board-columns[data-board-id="${boardId}"]`)[0]
+    await removeAllChildNodes(columnsArea)
+    await boardColumnsManager.loadColumns(boardId);
+    await cardsManager.loadCards(boardId);
+
 }
 
 function deleteBoard(clickEvent){
