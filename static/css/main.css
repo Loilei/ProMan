@@ -192,6 +192,7 @@ card.dragging{
 }
 
 .column-remove{
+    float: right;
     cursor: pointer;
 }
 
