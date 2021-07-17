@@ -212,3 +212,39 @@ def get_first_column_from_board(board_id):
         """, {"board_id": board_id})
 
     return user_username[0]['id']
+
+def delete_public_board(board_id):
+    cards_exist = data_manager.execute_select(
+        """
+        SELECT * FROM cards
+        WHERE board_id = %(board_id)s
+        """, {"board_id": board_id}
+    )
+    if len(cards_exist) != 0:
+        data_manager.execute_update(
+            """
+            SELECT * from cards
+            /*DELETE FROM cards
+            WHERE board_id = %(board_id)s*/
+            """, {"board_id": board_id}
+        )
+    statuses_exist = data_manager.execute_select(
+        """
+        SELECT * FROM statuses
+        WHERE board_id = %(board_id)s
+        """, {"board_id": board_id}
+    )
+    if len(statuses_exist) != 0:
+        data_manager.execute_update(
+            """
+            SELECT * FROM statuses
+           /* DELETE FROM statuses
+            WHERE board_id = %(board_id)s*/
+            """, {"board_id": board_id}
+        )
+    data_manager.execute_update(
+        """
+        DELETE FROM public_boards
+        WHERE id = %(board_id)s
+        """, {"board_id": board_id}
+    )

@@ -192,5 +192,12 @@ card.dragging{
 }
 
 .column-remove{
+    float: right;
     cursor: pointer;
+}
+
+.board-remove{
+    cursor: pointer;
+    float: right;
+    margin: 13px;
 }

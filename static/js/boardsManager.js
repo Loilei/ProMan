@@ -17,6 +17,8 @@ export let boardsManager = {
                 "click", createCard)
             domManager.addEventListener(`.board-add[data-board-column-id="${board.id}"]`,
                 "click", createColumn)
+            domManager.addEventListener(`.board-remove[data-board-id="${board.id}"]`,
+                "click", deleteBoard)
         }
     },
 }
@@ -98,4 +100,10 @@ async function showBoardWithNewColumn(boardId){
         await boardColumnsManager.loadColumns(boardId);
         await cardsManager.loadCards(boardId);
     }
+}
+
+function deleteBoard(clickEvent){
+    const boardId = clickEvent.path[1].attributes[1].value
+    dataHandler.deleteBoard(boardId)
+    clickEvent.path[3].hidden = true
 }

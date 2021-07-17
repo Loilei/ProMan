@@ -32,6 +32,7 @@ export let dataHandler = {
         }
         let response = await apiPost(`/create-new-card`, bodyContent)
         return response
+        // creates new card, saves it and calls the callback function with its data
     },
 
     getLatestCardID: async function () {
@@ -85,7 +86,10 @@ export let dataHandler = {
         let response = await apiGet(`/get-first-column-from-board/${boardId}`);
         return response
     },
-
+    deleteBoard: async function (boardId) {
+        let response = await apiGet(`/delete-board/${boardId}`)
+        return response
+    }
 }
 
 async function apiGet(url) {
