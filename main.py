@@ -135,11 +135,12 @@ def add_new_board():
         return queries.add_new_public_board(board_title)
 
 
-@app.route("/rename-board/<board_id>", methods=["PUT"])
+@app.route("/rename-board", methods=["PUT"])
 @json_response
-def rename_board(board_id):
+def rename_board():
     if request.method == "PUT":
         new_title = request.json['boardTitle']
+        board_id = request.json['boardId']
         return queries.rename_public_board(new_title, board_id)
 
 

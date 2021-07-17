@@ -19,12 +19,6 @@ function initCreateNewBoard(){
   )
 }
 
-function initRenameBoard() {
-    boardsManager.renameBoard()
-}
-
-
 init();
 initCreateNewBoard();
-initRenameBoard()
 

@@ -22,8 +22,8 @@ function boardBuilder(board) {
     return `<div class="board-container">
                 <section class="board" data-board-id="${board.id}" id="board${board.id}">
                     <div class="board-header">
-                        <h2 class="board-title" id="board-title-${board.id}">${board.title}</h2>
-                        <input class="board-rename-title" id="rename-board-title-${board.id}" type="submit" value="${board.title}" method="PUT" hidden>
+                        <h2 class="board-title" data-board-id="${board.id}" id="board-title-${board.id}">${board.title}</h2>
+                        <input class="board-rename-title" data-board-id="${board.id}" id="rename-board-title-${board.id}" value="${board.title}" method="PUT" hidden autofocus>
                         <button class="board-add" data-board-id="${board.id}">Add Card</button>
                         <button class="board-add" data-board-column-id="${board.id}">Add new column</button>
                         <button class="board-toggle" data-board-id="${board.id}">Show Cards</button>
