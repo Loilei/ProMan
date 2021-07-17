@@ -23,5 +23,7 @@ export let domManager = {
           console.error("could not find such html element: " + parentIdentifier)
       }
 
-  }
+  },
+  checkParentsExistence(parentIdentifier) { return !!document.querySelector(parentIdentifier) },
+  removeChild(childIdentifier) { document.querySelector(childIdentifier).innerHTML = ""},
 };

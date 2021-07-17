@@ -7,11 +7,7 @@
 
     <title>{% block title %} {% endblock %}</title>
 
-    {#    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" />#}
-    {#    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/solid.css"#}
-    {#          integrity="sha384-rdyFrfAIC05c5ph7BKz3l5NG5yEottvO/DQ0dCrwD8gzeQDjYBHNr1ucUpQuljos" crossorigin="anonymous">#}
-    {#    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/fontawesome.css"#}
-    {#          integrity="sha384-u5J7JghGz0qUrmEsWzBQkfvc8nK3fUT7DCaQzNQ+q4oEXhGSx+P2OqjWsfIRB8QT" crossorigin="anonymous">#}
+
 
     {#    <link rel="stylesheet" href="design.css">#}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -23,7 +19,11 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon/favicon-16x16.png') }}">
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/solid.css"
+          integrity="sha384-rdyFrfAIC05c5ph7BKz3l5NG5yEottvO/DQ0dCrwD8gzeQDjYBHNr1ucUpQuljos" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/fontawesome.css"
+          integrity="sha384-u5J7JghGz0qUrmEsWzBQkfvc8nK3fUT7DCaQzNQ+q4oEXhGSx+P2OqjWsfIRB8QT" crossorigin="anonymous">
 
 </head>
 <body>
@@ -48,6 +48,14 @@
                 </li>
             </ul>
         </div>
+        {% if 'username' in session %}
+            <a class="btn btn-outline-dark m-1" href="{{ url_for('logout') }}" role="button">Logout</a>
+        {% else %}
+            <a class="btn btn-secondary m-1" type="button" role="button" data-bs-toggle="modal"
+               data-bs-target="#loginModal" onclick="activateLoginModal()">Login</a>
+            <a class="btn btn-secondary m-1" type="button" role="button" data-bs-toggle="modal"
+               data-bs-target="#registerModal" id="rModal">Register</a>
+        {% endif %}
     </div>
 </nav>
 
@@ -60,19 +68,29 @@
     {% endif %}
 {% endwith %}
 
-
+<h1>ProMan</h1>
 {% block body %}
 {% endblock %}
 
 
-
-<h1>ProMan</h1>
-
-<script type="module" src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+<!-- Import Bootstrap -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
+<!-- Import jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
-
+<script>
+    $(document).ready(function (){
+        $("#rModal").click(function (){
+            $(this).modal({
+                fadeDuration: 200,
+                showClose: false
+            })
+            return false;
+        })
+    });
+</script>
 </body>
 </html>

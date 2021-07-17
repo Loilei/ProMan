@@ -35,10 +35,10 @@ def get_connection_data(db_name=None):
         db_name = os.environ.get('MY_PSQL_DBNAME')
 
     return {
-        'dbname': 'ddat33l7dhc22a',
-        'user': 'gdfnclmylpavev',
-        'host': 'ec2-54-78-36-245.eu-west-1.compute.amazonaws.com',
-        'password': 'e78c2cf0f4168b230919f9ffc2e86890b366340d1d4069f54839dcb712082ff8'
+        'dbname': db_name,
+        'user': os.environ.get('MY_PSQL_USER'),
+        'host': os.environ.get('MY_PSQL_HOST'),
+        'password': os.environ.get('MY_PSQL_PASSWORD')
     }
 
 
@@ -59,5 +59,15 @@ def execute_select(statement, variables=None, fetchall=True):
     return result_set
 
 
+def execute_update(statement, variables=None, fetchall=True):
+    """
+    Execute SELECT statement optionally parameterized.
+    Use fetchall=False to get back one value (fetchone)
 
-
+    Example:
+    > execute_select('SELECT %(title)s; FROM shows', variables={'title': 'Codecool'})
+    statement: SELECT statement
+    variables:  optional parameter dict, optional parameter fetchall"""
+    with establish_connection() as conn:
+        with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+            cursor.execute(statement, variables)
