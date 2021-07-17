@@ -17,6 +17,13 @@ export let boardsManager = {
         // await this.loadBoards()
         buildBoard(board)
     },
+    renameBoard: async function (clickEvent) {
+        let boardId = clickEvent.target.dataset.boardId;
+        console.log(boardId)
+        let boardTitle = document.getElementById(`board-title-${boardId}`).value;
+        console.log(boardTitle)
+        await dataHandler.renameBoard({"boardId": boardId,"boardTitle": boardTitle})
+    }
 }
 
 function buildBoard (board) {
@@ -26,7 +33,17 @@ function buildBoard (board) {
     domManager.addEventListener(`.board-toggle[data-board-id="${board.id}"]`, "click", showHideButtonHandler)
     domManager.addEventListener(`.board-add[data-board-id="${board.id}"]`, "click", createCard)
     domManager.addEventListener(`.board-add[data-board-column-id="${board.id}"]`, "click", createColumn, showHideButtonHandler)
+    domManager.addEventListenerById(`board-title-${board.id}`,"click", function () {
+        document.getElementById(`board-title-${board.id}`).hidden = true;
+        document.getElementById(`rename-board-title-${board.id}`).hidden = false;
+    })
+    domManager.addEventListenerById(`rename-board-title-${board.id}`,"keyUp",function() {
+        //TODO add if keyCode===13: itd
+
+    })
 }
+
+
 
 async function showHideButtonHandler(clickEvent) {
     const boardId = clickEvent.target.dataset.boardId
@@ -84,3 +101,5 @@ async function createColumn(clickEvent){
     let title = "New column"
     dataHandler.createNewColumn(columnId, boardId, title)
 }
+
+

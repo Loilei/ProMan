@@ -26,8 +26,6 @@ export let dataHandler = {
         let response = await apiPost2("/create-board",boardTitle)
         console.log(response)
         return response
-
-
     },
     createNewCard: async function (cardTitle, boardId, statusId) {
         let response = await apiPost(`/create-new-card/${boardId}/${cardTitle}/${statusId}`)
@@ -58,6 +56,11 @@ export let dataHandler = {
     },
     createNewColumn: async function(columnId, boardId, title){
         await apiPost(`/create-new-column/${columnId}/${boardId}/${title}`)
+    },
+    renameBoard: async function (boardId,newTitle) {
+        let response = await apiPut2(`/rename-board/${boardId}`,newTitle)
+        return response
+
     }
 }
 
@@ -71,9 +74,24 @@ async function apiGet(url) {
     }
 }
 
-async function apiPost2(url, payload)
-{ let response = await fetch(url, {
+async function apiPost2 (url, payload) {
+    let response = await fetch(url, {
         method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+      },
+        body:JSON.stringify(payload)
+
+    })
+    if (response.status === 200) {
+        let data = response.json()
+        return data
+    }
+}
+
+async function apiPut2 (url, payload) {
+     let response = await fetch(url, {
+        method: 'PUT',
         headers: {
         'Content-Type': 'application/json',
       },

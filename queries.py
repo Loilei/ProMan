@@ -187,19 +187,19 @@ def delete_column(column_id):
 
 
 def add_new_public_board(board_title):
-    new_board = '''insert into public_boards (title) 
-                values (%(board_title)s)
-                returning id, title;
-            '''
+    new_board = """ INSERT INTO public_boards (title) 
+                VALUES (%(board_title)s)
+                RETURNING id, title; """
 
-    board = data_manager.execute_select(new_board, {"board_title": board_title},fetchall=False)
+    board = data_manager.execute_select(new_board, {"board_title": board_title}, fetchall=False)
     return board
 
 
-def rename_public_board(cursor, new_title, board_id):
-    title = """ update public_boards 
-                    set title = %s 
-                    where id= %s """
-    cursor.execute(title, new_title, board_id)
-    #TODO use data_manager
+def rename_public_board(new_title, board_id):
+    rename_title = """ UPDATE public_boards 
+                    SET title = %(new_title)s 
+                    WHERE id= %(board_id)s 
+                    RETURNING id, title; """
+    renamed_board = data_manager.execute_select(rename_title, {"new_title": new_title, "board_id": board_id}, fetchall=False)
+    return renamed_board
 
