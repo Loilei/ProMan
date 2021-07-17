@@ -19,6 +19,9 @@ function initCreateNewBoard(){
   )
 }
 
+
+
+
 init();
 initCreateNewBoard();
 
