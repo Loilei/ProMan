@@ -54,8 +54,12 @@ async function renameBoard (keyEvent) {
     let boardBackendId = keyEvent.target.getAttribute("data-board-id");
     let input_board = document.getElementById(`rename-board-title-${boardBackendId}`)
     let boardTitle = input_board.value;
+    let titleBoard = document.getElementById(`board-title-${boardBackendId}`)
 
     if (keyEvent.key === "Enter"){
+        titleBoard.innerText = boardTitle
+        titleBoard.hidden = false;
+        input_board.hidden = true;
         await dataHandler.renameBoard({"boardId": boardBackendId,"boardTitle": boardTitle})
     } else if (keyEvent.key === "Escape") {
         let previousValue = input_board.getAttribute("value")
