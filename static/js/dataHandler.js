@@ -23,6 +23,9 @@ export let dataHandler = {
     },
     createNewBoard: async function (boardTitle) {
         // creates new board, saves it and calls the callback function with its data
+        let response = await apiPost2("/create-board",boardTitle)
+        console.log(response)
+        return response
     },
     createNewCard: async function (cardTitle, boardId, statusId) {
         let bodyContent = {
@@ -78,6 +81,12 @@ export let dataHandler = {
         let response = await apiPost(`/create-new-column/${columnId}/${boardId}/${title}`)
         return response
     },
+    renameBoard: async function (boardData) {
+        let response = await apiPut2("/rename-board", boardData)
+        return response
+
+
+    },
     deleteColumn: async function (columnId) {
         let response = await apiGet(`/delete-column/${columnId}`)
         return response
@@ -102,6 +111,36 @@ async function apiGet(url) {
     }
 }
 
+async function apiPost2 (url, payload) {
+    let response = await fetch(url, {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+      },
+        body:JSON.stringify(payload)
+
+    })
+    if (response.status === 200) {
+        let data = response.json()
+        return data
+    }
+}
+
+async function apiPut2 (url, payload) {
+     let response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+        'Content-Type': 'application/json',
+      },
+        body:JSON.stringify(payload)
+
+    })
+    if (response.status === 200) {
+        let data = response.json()
+        return data
+    }
+}
+
 async function apiPost(url, body_content) {
     let response = await fetch(url, {
         method: 'POST',
@@ -111,6 +150,7 @@ async function apiPost(url, body_content) {
         body: JSON.stringify(body_content),
     })
 }
+
 
 async function apiDelete(url) {
     let response = await fetch(url, {

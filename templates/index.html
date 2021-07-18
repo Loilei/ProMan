@@ -3,6 +3,11 @@
 {% block title %}Proman{% endblock %}
 
 {% block body %}
+
+<button type="submit" name="add-public-board" id="new-board-create-button">+ Create new board</button>
+<input hidden id="new-board-title" type="text">
+
+<button hidden type="submit" name="save-public-board" method="POST" id="new-board-save-button">Save</button>
     <div id="root"></div>
 
 {#<!-- Register Modal -->#}

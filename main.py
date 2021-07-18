@@ -164,6 +164,25 @@ def get_first_column_from_board(board_id):
     return queries.get_first_column_from_board(board_id)
 
 
+@app.route("/create-board", methods= ["POST"])
+@json_response
+def add_new_board():
+    if request.method == "POST":
+        print(request.json)
+        board_title = request.json['boardTitle']
+        print(board_title)
+        return queries.add_new_public_board(board_title)
+
+
+@app.route("/rename-board", methods=["PUT"])
+@json_response
+def rename_board():
+    if request.method == "PUT":
+        new_title = request.json['boardTitle']
+        board_id = request.json['boardId']
+        return queries.rename_public_board(new_title, board_id)
+
+
 def main():
     app.run(debug=True)
 

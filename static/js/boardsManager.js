@@ -19,8 +19,53 @@ export let boardsManager = {
                 "click", createColumn)
             domManager.addEventListener(`.board-remove[data-board-id="${board.id}"]`,
                 "click", deleteBoard)
+            domManager.addEventListenerById(`board-title-${board.id}`,"click", showHideRename)
+            domManager.addEventListenerById(`rename-board-title-${board.id}`,"keyup",renameBoard)
         }
     },
+    createNewBoard: async function () {
+        let boardTitle = document.getElementById("new-board-title").value;
+        let board = await dataHandler.createNewBoard({"boardTitle": boardTitle});
+        buildBoard(board)
+    },
+}
+
+function buildBoard (board) {
+    const boardBuilder = htmlFactory(htmlTemplates.board);
+    const content = boardBuilder(board)
+    domManager.addChild("#root", content)
+    domManager.addEventListener(`.board-toggle[data-board-id="${board.id}"]`, "click", showHideButtonHandler)
+    domManager.addEventListener(`.board-add[data-board-id="${board.id}"]`, "click", createCard)
+    domManager.addEventListener(`.board-add[data-board-column-id="${board.id}"]`, "click", createColumn, showHideButtonHandler)
+    domManager.addEventListenerById(`board-title-${board.id}`,"click", showHideRename)
+    domManager.addEventListenerById(`rename-board-title-${board.id}`,"keyup",renameBoard)
+    domManager.addEventListener(`.board-remove[data-board-id="${board.id}"]`,
+                "click", deleteBoard)
+}
+
+
+function showHideRename (clickEvent) {
+        let boardId = clickEvent.target.getAttribute("data-board-id");
+        document.getElementById(`board-title-${boardId}`).hidden = true;
+        document.getElementById(`rename-board-title-${boardId}`).hidden = false;}
+
+
+async function renameBoard (keyEvent) {
+    let boardBackendId = keyEvent.target.getAttribute("data-board-id");
+    let input_board = document.getElementById(`rename-board-title-${boardBackendId}`)
+    let boardTitle = input_board.value;
+    let titleBoard = document.getElementById(`board-title-${boardBackendId}`)
+
+    if (keyEvent.key === "Enter"){
+        titleBoard.innerText = boardTitle
+        titleBoard.hidden = false;
+        input_board.hidden = true;
+        await dataHandler.renameBoard({"boardId": boardBackendId,"boardTitle": boardTitle})
+    } else if (keyEvent.key === "Escape") {
+        let previousValue = input_board.getAttribute("value")
+        input_board.setAttribute("value", previousValue)
+
+    }
 }
 
 async function showHideButtonHandler(clickEvent) {
