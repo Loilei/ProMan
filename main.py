@@ -1,8 +1,7 @@
 import os
 from datetime import timedelta
 
-from flask import Flask, render_template, url_for, session, request, flash, redirect
-
+from flask import Flask, render_template, url_for, session, request, flash, redirect, make_response
 from util import json_response, hash_password
 
 
@@ -58,10 +57,16 @@ def login():
         email = request.form['email']
         password = request.form['password']
         if queries.check_user_login(email, password):
+            session_data = queries.get_session_data(email)
             session['email'] = email
-            session['username'] = queries.get_session_username(email)
+            session['username'] = session_data['username']
+            # TODO delete response (cookie)
+            resp = make_response(render_template('login.html'))
+            resp.set_cookie("login", "success")
+            resp.set_cookie("username", session_data['username'])
+            resp.set_cookie("user_id", str(session_data['id']))
             flash(f"You were successfully logged in, {session['username']}")
-
+            return resp
         else:
             flash('Login failed. Try again!')
             return redirect(url_for("index"))
@@ -75,7 +80,6 @@ def logout():
         flash(f"You've been logged out!, {session['username']}")
     session.pop("username", None)
     session.pop("email", None)
-
     return redirect(url_for("index"))
 
 

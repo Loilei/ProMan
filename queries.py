@@ -69,15 +69,15 @@ def check_user_login(email, password):
     return bcrypt.checkpw(password.encode('UTF-8'), user_password[0]["password"].encode('UTF-8'))
 
 
-def get_session_username(email):
-    username = data_manager.execute_select(
+def get_session_data(email):
+    user_data = data_manager.execute_select(
         """
-        SELECT username FROM users
+        SELECT id, username FROM users
         WHERE email = %(email)s
         ;
         """
         , {"email": email})
-    return username[0]["username"]
+    return user_data[0]
 
 
 def get_statuses(board_id):
@@ -266,3 +266,5 @@ def rename_public_board(new_title, board_id):
                     RETURNING id, title; """
     renamed_board = data_manager.execute_select(rename_title, {"new_title": new_title, "board_id": board_id}, fetchall=False)
     return renamed_board
+
+
