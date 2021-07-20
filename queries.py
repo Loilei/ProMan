@@ -92,13 +92,13 @@ def get_statuses(board_id):
 
 
 def rename_status(column_id, new_title):
-    data_manager.execute_update(
-        """
+    rename_title = """
         UPDATE statuses
         SET title = %(title)s
         WHERE id = %(column_id)s
-        """, {"column_id": column_id, "title": new_title}
-    )
+        RETURNING id, title """
+    renamed_status = data_manager.execute_select(rename_title, {"column_id": column_id, "title": new_title}, fetchall=False)
+    return renamed_status
 
 
 def is_board_empty(column_id, board_id):

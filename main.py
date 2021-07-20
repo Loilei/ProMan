@@ -94,7 +94,7 @@ def rename_status():
     data = request.get_json()
     column_id = data["column_id"]
     new_title = data["title"]
-    queries.rename_status(column_id, new_title)
+    return queries.rename_status(column_id, new_title)
 
 
 @app.route("/create-new-card", methods=["POST"])

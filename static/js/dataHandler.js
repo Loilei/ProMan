@@ -70,7 +70,8 @@ export let dataHandler = {
         "title": newColumnTitle,
         "column_id": columnId
         }
-        let response = await apiPut(`/rename_column`, bodyContent)
+        let response = await apiPut2(`/rename_column`, bodyContent)
+        return response
     },
 
     getLatestStatus: async function () {
