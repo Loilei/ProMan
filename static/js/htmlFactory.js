@@ -44,6 +44,7 @@ function cardBuilder(card) {
 
 function columnsBuilder(boardId, column){
     return `<div class="board-column" id="column${column.id}">
+                <input type="text" class="column-title-input" data-column-id="${column.id}" placeholder="${column.title}"> 
                 <div class="board-column-title" data-board-column-title-id="${column.id}">${column.title}
                     <div class="column-remove" id="${column.id}"><i class="fas fa-trash-alt"></i></div>
                 </div>

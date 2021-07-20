@@ -9,6 +9,7 @@ export let boardColumnsManager = {
             const columnsBuilder = htmlFactory(htmlTemplates.columns);
             const content = columnsBuilder(boardId, column);
             domManager.addChild(`.board-columns[data-board-id="${boardId}"]`, content)
+            $(`.column-title-input[data-column-id="${column.id}"]`)[0].hidden = true;
             domManager.addEventListener(`.board-column-title[data-board-column-title-id="${column.id}"]`,
                 'click', renameColumn)
             domManager.addEventListener(`.column-remove[id="${column.id}"]`, 'click', deleteColumn)
@@ -17,40 +18,36 @@ export let boardColumnsManager = {
 }
 
 async function renameColumn(clickEvent){
-    const columnId = clickEvent.target.dataset.boardColumnTitleId;
-    const columnTitle = clickEvent.target.innerText;
-    const columnShowNumber = document.querySelectorAll('input').length;
-    if (columnTitle !== "" && columnShowNumber === 0) { changeTitleDiv(columnId, columnTitle) }
-    else { $(this).find('input').keypress(async function (element) {
-        // Enter pressed?
-        if (element.which === 13) {
-            let newColumnTitle = this.value;
-            let columnId = clickEvent.path[1].attributes['data-board-column-title-id'].value;
-            if (newColumnTitle === "") {
-                returnTitleDiv(columnId)
-            } else {
-                $(`.board-column-title[data-board-column-title-id="${columnId}"]`)[0].innerText = newColumnTitle
-                await dataHandler.renameColumn(columnId, newColumnTitle)
-            }
+    let tagTitleDiv = clickEvent.target;
+    const columnId = tagTitleDiv.dataset.boardColumnTitleId;
+    let tagInput = $(`.column-title-input[data-column-id="${columnId}"]`)[0];
+    tagTitleDiv.hidden = true;
+    tagInput.hidden = false;
+    domManager.addEventListener(`.column-title-input[data-column-id="${columnId}"]`, "keydown", getUserInput);
+    //
+}
+
+async function getUserInput(keyEvent) {
+    let newColumnTitle = keyEvent.target.value;
+    let columnId = keyEvent.target.getAttribute('data-column-id')
+    if (keyEvent.key === "Enter") {
+        if (newColumnTitle === "") {
+            returnColumnTitle(columnId)
+        } else {
+            await dataHandler.renameColumn(columnId, newColumnTitle)
+            returnColumnTitle(columnId, newColumnTitle)
         }
-    })
+    } else if (keyEvent.key === "Escape") {
+        returnColumnTitle(columnId)
     }
-    $(this).find('input[type=submit]').hide()
 }
 
-function changeTitleDiv(columnId, columnTitle){
-    document.querySelector(`.board-column-title[data-board-column-title-id="${columnId}"]`).innerHTML =
-            `<input id="columnTitle" type="text" class="form-control" placeholder='${columnTitle}'>
-             <input type="submit">`
-}
-
-function returnTitleDiv(columnId){
-    let divTitle = document.getElementById('columnTitle').placeholder
-    document.querySelector(`.board-column-title[data-board-column-title-id="${columnId}"]`).innerHTML =
-        `<div class="board-column-title" data-board-column-title-id="${columnId}">${divTitle}
-            <div class="column-remove" id="${columnId}"><i class="fas fa-trash-alt"></i></div>
-        </div>`
-    domManager.addEventListener(`.column-remove[id="${columnId}"]`, 'click', deleteColumn)
+function returnColumnTitle(columnId, newColumnTitle=null){
+    let tagTitleDiv = $(`.board-column-title[data-board-column-title-id="${columnId}"]`)[0];
+    let tagInput = $(`.column-title-input[data-column-id="${columnId}"]`)[0];
+    if (newColumnTitle !== null){ tagTitleDiv.innerText = newColumnTitle }
+    tagTitleDiv.hidden = false;
+    tagInput.hidden = true;
 }
 
 function deleteColumn(clickEvent){

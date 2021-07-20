@@ -1,8 +1,7 @@
 import { boardsManager } from "./boardsManager.js";
 
 function init() {
-  boardsManager.loadBoards()
-
+    boardsManager.loadBoards()
 }
 
 function initCreateNewBoard(){
@@ -19,9 +18,19 @@ function initCreateNewBoard(){
   )
 }
 
+// function getPrivatePage(){
+//     let cookies = document.cookie.split(';')
+//     if ("login=success" === cookies[0]){
+//         init();
+//     }
+//     else {
+//         init();
+//     }
+// }
 
 
 
 init();
+// getPrivatePage()
 initCreateNewBoard();
 
