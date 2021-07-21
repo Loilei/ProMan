@@ -22,8 +22,10 @@ export async function renameColumn(clickEvent){
     const columnId = tagTitleDiv.dataset.boardColumnTitleId;
     let tagInput = $(`.column-title-input[data-column-id="${columnId}"]`)[0];
     tagTitleDiv.hidden = true;
-    tagInput.hidden = false;
-    domManager.addEventListener(`.column-title-input[data-column-id="${columnId}"]`, "keydown", getUserInput);
+    if ( tagInput ) {
+        tagInput.hidden = false;
+        domManager.addEventListener(`.column-title-input[data-column-id="${columnId}"]`, "keydown", getUserInput);
+    }
 }
 
 async function getUserInput(keyEvent) {

@@ -165,6 +165,7 @@ async function saveColumnTitle(columnId, newColumnTitle, boardId) {
     domManager.addEventListener(`.board-column-title[data-board-column-title-id="${columnId}"]`,
         'click', renameColumn)
     domManager.addEventListener(`.column-remove[id="${columnId}"]`, 'click', deleteColumn)
+//    TODO movingCard()
 }
 
 function deleteBoard(clickEvent){
