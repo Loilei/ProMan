@@ -17,8 +17,6 @@ export let boardsManager = {
                 "click", createCard)
             domManager.addEventListener(`.board-add[data-board-column-id="${board.id}"]`,
                 "click", createColumn)
-            // domManager.addEventListener(`.board-add[data-board-column-id="${board.id}"]`,
-            //     "click", showHideButtonHandler)
             domManager.addEventListener(`.board-remove[data-board-id="${board.id}"]`,
                 "click", deleteBoard)
             domManager.addEventListenerById(`board-title-${board.id}`,"click", showHideRename)

@@ -18,13 +18,12 @@ export let boardColumnsManager = {
 }
 
 async function renameColumn(clickEvent){
-    let tagTitleDiv = clickEvent.target;
+    let tagTitleDiv = clickEvent.path[1];
     const columnId = tagTitleDiv.dataset.boardColumnTitleId;
     let tagInput = $(`.column-title-input[data-column-id="${columnId}"]`)[0];
     tagTitleDiv.hidden = true;
     tagInput.hidden = false;
     domManager.addEventListener(`.column-title-input[data-column-id="${columnId}"]`, "keydown", getUserInput);
-    //
 }
 
 async function getUserInput(keyEvent) {
@@ -45,7 +44,8 @@ async function getUserInput(keyEvent) {
 function returnColumnTitle(columnId, newColumnTitle=null){
     let tagTitleDiv = $(`.board-column-title[data-board-column-title-id="${columnId}"]`)[0];
     let tagInput = $(`.column-title-input[data-column-id="${columnId}"]`)[0];
-    if (newColumnTitle !== null){ tagTitleDiv.innerText = newColumnTitle }
+    let titleSpan = $(`.board-column-title[data-board-column-title-id="${columnId}"] span`)[0]
+    if (newColumnTitle !== null) { titleSpan.innerText = newColumnTitle }
     tagTitleDiv.hidden = false;
     tagInput.hidden = true;
 }
