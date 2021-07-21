@@ -135,7 +135,12 @@ async function createColumn(clickEvent){
     columnId ++;
     let placeholderTitle = "New column";
     let newColumn = createColumnDiv(boardId, columnId, placeholderTitle);
-    $(`.board-columns[data-board-id="${boardId}"]`).append(newColumn);
+    let boardColumnContent = $(`.board-columns[data-board-id="${boardId}"]`)
+    if (boardColumnContent.children().length === 0){
+        await boardColumnsManager.loadColumns(boardId);
+        await cardsManager.loadCards(boardId);
+    }
+    boardColumnContent.append(newColumn);
     $(`.board-column-title[data-board-column-title-id="${columnId}"]`)[0].hidden = true;
     domManager.addEventListener(`.column-title-input[data-column-id="${columnId}"]`, 'keydown', getUserInput)
 }
