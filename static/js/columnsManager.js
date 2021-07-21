@@ -17,7 +17,7 @@ export let boardColumnsManager = {
     }
 }
 
-async function renameColumn(clickEvent){
+export async function renameColumn(clickEvent){
     let tagTitleDiv = clickEvent.path[1];
     const columnId = tagTitleDiv.dataset.boardColumnTitleId;
     let tagInput = $(`.column-title-input[data-column-id="${columnId}"]`)[0];
@@ -50,7 +50,7 @@ function returnColumnTitle(columnId, newColumnTitle=null){
     tagInput.hidden = true;
 }
 
-function deleteColumn(clickEvent){
+export function deleteColumn(clickEvent){
     const columnId = clickEvent.path[1].attributes['id'].value
     dataHandler.deleteColumn(columnId)
     clickEvent.path[3].hidden = true

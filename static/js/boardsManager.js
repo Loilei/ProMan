@@ -3,6 +3,7 @@ import { htmlFactory, htmlTemplates } from "./htmlFactory.js";
 import { domManager } from "./domManager.js";
 import { cardsManager, deleteButtonHandler, movingCards } from "./cardsManager.js";
 import { boardColumnsManager } from "./columnsManager.js";
+import { renameColumn, deleteColumn } from "./columnsManager.js";
 
 export let boardsManager = {
     loadBoards: async function () {
@@ -161,6 +162,9 @@ async function saveColumnTitle(columnId, newColumnTitle, boardId) {
     tagTitleDiv.hidden = false;
     tagInput.hidden = true;
     await dataHandler.createNewColumn(columnId, boardId, newColumnTitle)
+    domManager.addEventListener(`.board-column-title[data-board-column-title-id="${columnId}"]`,
+        'click', renameColumn)
+    domManager.addEventListener(`.column-remove[id="${columnId}"]`, 'click', deleteColumn)
 }
 
 function deleteBoard(clickEvent){
