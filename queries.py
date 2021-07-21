@@ -167,15 +167,16 @@ def get_latest_column_id():
     )[0]['max']
 
 
-def save_column(columnId, boardId, title):
-    data_manager.execute_update(
-        """
+def add_new_column(column_id, board_id, title):
+    new_column = """
         INSERT INTO statuses 
-        (id, board_id, title)
+        (id, board_id, title, column_order)
         VALUES 
-        (%(columnId)s, %(boardId)s, %(title)s)
-        ; 
-        """, {"columnId": columnId, "boardId": boardId, "title": title})
+        (%(column_id)s, %(board_id)s, %(title)s, 1)
+        RETURNING id, board_id, title, column_order;
+        """
+    column = data_manager.execute_select(new_column, {"column_id": column_id, "board_id": board_id, "title": title})
+    return column
 
 
 def delete_column(column_id):

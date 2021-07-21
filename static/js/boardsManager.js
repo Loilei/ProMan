@@ -17,6 +17,8 @@ export let boardsManager = {
                 "click", createCard)
             domManager.addEventListener(`.board-add[data-board-column-id="${board.id}"]`,
                 "click", createColumn)
+            // domManager.addEventListener(`.board-add[data-board-column-id="${board.id}"]`,
+            //     "click", showHideButtonHandler)
             domManager.addEventListener(`.board-remove[data-board-id="${board.id}"]`,
                 "click", deleteBoard)
             domManager.addEventListenerById(`board-title-${board.id}`,"click", showHideRename)
@@ -132,21 +134,50 @@ async function createColumn(clickEvent){
     let boardId = clickEvent.target.dataset.boardColumnId;
     let columnId = await dataHandler.getLatestStatus();
     columnId ++;
-    let title = "New_column"
-    await dataHandler.createNewColumn(columnId, boardId, title)
-    showBoardWithNewColumn(boardId)
+    let placeholderTitle = "New column";
+    let newColumn = createColumnDiv(boardId, columnId, placeholderTitle);
+    $(`.board-columns[data-board-id="${boardId}"]`).append(newColumn);
+    $(`.board-column-title[data-board-column-title-id="${columnId}"]`)[0].hidden = true;
+    domManager.addEventListener(`.column-title-input[data-column-id="${columnId}"]`, 'keydown', getUserInput)
 }
 
-async function showBoardWithNewColumn(boardId){
-    let columnsArea = $(`.board-columns[data-board-id="${boardId}"]`)[0]
-    await removeAllChildNodes(columnsArea)
-    await boardColumnsManager.loadColumns(boardId);
-    await cardsManager.loadCards(boardId);
 
+function getUserInput(keyEvent){
+    let newColumnTitle = keyEvent.target.value;
+    let columnId = keyEvent.target.getAttribute('data-column-id')
+    let boardId = keyEvent.path[2].attributes[1].value
+    if (keyEvent.key === "Enter") {
+        if (newColumnTitle === "") { newColumnTitle = keyEvent.target.placeholder }
+        saveColumnTitle(columnId, newColumnTitle, boardId)
+    } else if (keyEvent.key === "Escape") {
+        newColumnTitle = keyEvent.target.placeholder
+        saveColumnTitle(columnId, newColumnTitle, boardId)
+    }
+}
+
+async function saveColumnTitle(columnId, newColumnTitle, boardId) {
+    let tagTitleDiv = $(`.board-column-title[data-board-column-title-id="${columnId}"]`)[0];
+    let tagInput = $(`.column-title-input[data-column-id="${columnId}"]`)[0];
+    let titleSpan = $(`.board-column-title[data-board-column-title-id="${columnId}"] span`)[0]
+    titleSpan.innerText = newColumnTitle
+    tagTitleDiv.hidden = false;
+    tagInput.hidden = true;
+    await dataHandler.createNewColumn(columnId, boardId, newColumnTitle)
 }
 
 function deleteBoard(clickEvent){
     const boardId = clickEvent.path[1].attributes[1].value
     dataHandler.deleteBoard(boardId)
     clickEvent.path[3].hidden = true
+}
+
+function createColumnDiv(boardId, columnId, placeholderTitle){
+    return `<div class="board-column" id="column${columnId}">
+                <input type="text" class="column-title-input" data-column-id="${columnId}" placeholder="${placeholderTitle}">
+                <div class="board-column-title" data-board-column-title-id="${columnId}">
+                    <span>${placeholderTitle}</span>
+                    <div class="column-remove" id="${columnId}"><i class="fas fa-trash-alt"></i></div>
+                </div>
+                <div class="board${boardId}-column-content" data-column-id="${columnId}"></div>
+            </div>`
 }

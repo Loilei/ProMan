@@ -79,7 +79,12 @@ export let dataHandler = {
         return response
     },
     createNewColumn: async function(columnId, boardId, title){
-        let response = await apiPost(`/create-new-column/${columnId}/${boardId}/${title}`)
+        let bodyContent = {
+            "title": title,
+            "column_id": columnId,
+            "board_id": boardId,
+        }
+        let response = await apiPost2(`/create-new-column`, bodyContent)
         return response
     },
     renameBoard: async function (boardData) {
