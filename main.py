@@ -60,7 +60,6 @@ def login():
             session_data = queries.get_session_data(email)
             session['email'] = email
             session['username'] = session_data['username']
-            # TODO delete response (cookie)
             resp = make_response(render_template('login.html'))
             resp.set_cookie("login", "success")
             resp.set_cookie("username", session_data['username'])

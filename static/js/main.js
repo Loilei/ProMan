@@ -18,19 +18,24 @@ function initCreateNewBoard(){
   )
 }
 
-// function getPrivatePage(){
-//     let cookies = document.cookie.split(';')
-//     if ("login=success" === cookies[0]){
-//         init();
-//     }
-//     else {
-//         init();
-//     }
-// }
+function getPrivatePage(){
+    let cookies = document.cookie.split('; ')
+    if ("login=success" === cookies[0]){
+        console.log(document.cookie)
+    }
+    else {
+        console.log("Cookies doesn't exist")
+    }
+}
 
-
+function deleteCookie(){
+    let cookie = document.cookie.split(";");
+    cookie.forEach(function(element) {
+        document.cookie = element.replace(/^ +/, "").replace(/=.*/, "=;expires="
+            + new Date().toUTCString() + ";path=/"); });
+}
 
 init();
-// getPrivatePage()
+getPrivatePage()
 initCreateNewBoard();
 
