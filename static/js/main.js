@@ -28,12 +28,6 @@ function getPrivatePage(){
     }
 }
 
-function deleteCookie(){
-    let cookie = document.cookie.split(";");
-    cookie.forEach(function(element) {
-        document.cookie = element.replace(/^ +/, "").replace(/=.*/, "=;expires="
-            + new Date().toUTCString() + ";path=/"); });
-}
 
 init();
 getPrivatePage()

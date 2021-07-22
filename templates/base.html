@@ -49,7 +49,7 @@
             </ul>
         </div>
         {% if 'username' in session %}
-            <a class="btn btn-outline-dark m-1" href="{{ url_for('logout') }}" role="button">Logout</a>
+            <a onclick="deleteCookie()" class="btn btn-outline-dark m-1" href="{{ url_for('logout') }}" role="button">Logout</a>
         {% else %}
             <a class="btn btn-secondary m-1" type="button" role="button" data-bs-toggle="modal"
                data-bs-target="#loginModal" onclick="activateLoginModal()">Login</a>
@@ -91,6 +91,14 @@
             return false;
         })
     });
+
+    function deleteCookie(){
+        let cookie = document.cookie.split(";");
+        cookie.forEach(function(element) {
+            document.cookie = element.replace(/^ +/, "").replace(/=.*/, "=;expires="
+                + new Date().toUTCString() + ";path=/"); });
+    }
+
 </script>
 </body>
 </html>
