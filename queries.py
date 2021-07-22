@@ -97,7 +97,8 @@ def rename_status(column_id, new_title):
         SET title = %(title)s
         WHERE id = %(column_id)s
         RETURNING id, title """
-    renamed_status = data_manager.execute_select(rename_title, {"column_id": column_id, "title": new_title}, fetchall=False)
+    renamed_status = data_manager.execute_select(rename_title, {"column_id": column_id, "title": new_title},
+                                                 fetchall=False)
     return renamed_status
 
 
@@ -214,6 +215,7 @@ def get_first_column_from_board(board_id):
 
     return user_username[0]['id']
 
+
 def delete_public_board(board_id):
     cards_exist = data_manager.execute_select(
         """
@@ -224,9 +226,8 @@ def delete_public_board(board_id):
     if len(cards_exist) != 0:
         data_manager.execute_update(
             """
-            SELECT * from cards
-            /*DELETE FROM cards
-            WHERE board_id = %(board_id)s*/
+            DELETE FROM cards
+            WHERE board_id = %(board_id)s
             """, {"board_id": board_id}
         )
     statuses_exist = data_manager.execute_select(
@@ -238,9 +239,8 @@ def delete_public_board(board_id):
     if len(statuses_exist) != 0:
         data_manager.execute_update(
             """
-            SELECT * FROM statuses
-           /* DELETE FROM statuses
-            WHERE board_id = %(board_id)s*/
+            DELETE FROM statuses
+            WHERE board_id = %(board_id)s
             """, {"board_id": board_id}
         )
     data_manager.execute_update(
@@ -265,7 +265,6 @@ def rename_public_board(new_title, board_id):
                     SET title = %(new_title)s 
                     WHERE id= %(board_id)s 
                     RETURNING id, title; """
-    renamed_board = data_manager.execute_select(rename_title, {"new_title": new_title, "board_id": board_id}, fetchall=False)
+    renamed_board = data_manager.execute_select(rename_title, {"new_title": new_title, "board_id": board_id},
+                                                fetchall=False)
     return renamed_board
-
-
