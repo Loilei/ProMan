@@ -254,7 +254,7 @@ def delete_public_board(board_id):
     )
 
 
-def add_new_public_board(board_title, user_id=None):
+def add_new_board(board_title, user_id=None):
     if user_id is None:
         return data_manager.execute_select(
             """ INSERT INTO public_boards (title) 

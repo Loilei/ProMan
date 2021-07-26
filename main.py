@@ -183,8 +183,8 @@ def add_new_board():
     board_title = request.json['boardTitle']
     if board == "private_boards":
         user_id = session['id']
-        return queries.add_new_public_board(board_title, user_id)
-    return queries.add_new_public_board(board_title)
+        return queries.add_new_board(board_title, user_id)
+    return queries.add_new_board(board_title)
 
 
 @app.route("/rename-board", methods=["PUT"])
