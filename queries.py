@@ -213,6 +213,7 @@ def get_first_column_from_board(board_id):
 
     return user_username[0]['id']
 
+
 def delete_public_board(board_id):
     cards_exist = data_manager.execute_select(
         """
@@ -264,5 +265,24 @@ def rename_public_board(new_title, board_id):
                     SET title = %(new_title)s 
                     WHERE id= %(board_id)s 
                     RETURNING id, title; """
-    renamed_board = data_manager.execute_select(rename_title, {"new_title": new_title, "board_id": board_id}, fetchall=False)
+    renamed_board = data_manager.execute_select(rename_title, {"new_title": new_title, "board_id": board_id},
+                                                fetchall=False)
     return renamed_board
+
+
+def archive_card(card_id):
+    archive = """ UPDATE cards
+                SET archived = 'yes'
+                where id = %(card_id)s; """
+
+    data_manager.execute_update(archive, {"card_id": card_id})
+
+
+def unarchive_card(card_id):
+    archive = """ UPDATE cards
+                SET archived = 'no'
+                where id = %(card_id)s; """
+
+    data_manager.execute_update(archive, {"card_id": card_id})
+
+

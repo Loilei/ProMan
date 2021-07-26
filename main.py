@@ -183,6 +183,20 @@ def rename_board():
         return queries.rename_public_board(new_title, board_id)
 
 
+@app.route("/archive-card/<int: card_id>", methods=["PUT"])
+@json_response
+def archive_card(card_id):
+    if request.method == "PUT":
+        return queries.archive_card(card_id)
+
+
+@app.route("/unarchive-card/<int: card_id>", methods=["PUT"])
+@json_response
+def unarchive_card(card_id):
+    if request.method == "PUT":
+        return queries.unarchive_card(card_id)
+
+
 def main():
     app.run(debug=True)
 
