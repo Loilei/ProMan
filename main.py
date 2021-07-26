@@ -26,6 +26,10 @@ def get_boards():
     """
     All the boards
     """
+    board = check_board()
+    if board == "private_boards":
+        user_id = session['id']
+        return queries.get_boards(user_id)
     return queries.get_boards()
 
 
@@ -80,6 +84,7 @@ def logout():
         flash(f"You've been logged out!, {session['username']}")
     session.pop("username", None)
     session.pop("email", None)
+    session.pop("id", None)
     return redirect(url_for("index"))
 
 
@@ -171,14 +176,15 @@ def get_first_column_from_board(board_id):
     return queries.get_first_column_from_board(board_id)
 
 
-@app.route("/create-board", methods= ["POST"])
+@app.route("/create-board", methods=["POST"])
 @json_response
 def add_new_board():
-    if request.method == "POST":
-        print(request.json)
-        board_title = request.json['boardTitle']
-        print(board_title)
-        return queries.add_new_public_board(board_title)
+    board = check_board()
+    board_title = request.json['boardTitle']
+    if board == "private_boards":
+        user_id = session['id']
+        return queries.add_new_public_board(board_title, user_id)
+    return queries.add_new_public_board(board_title)
 
 
 @app.route("/rename-board", methods=["PUT"])

@@ -20,17 +20,20 @@ def get_card_status(status_id):
     return status
 
 
-def get_boards():
+def get_boards(user_id=None):
     """
     Gather all boards
     :return:
     """
+    if user_id is None:
+        return data_manager.execute_select(
+            """
+            SELECT * FROM public_boards;
+            """)
     return data_manager.execute_select(
         """
-        SELECT * FROM public_boards
-        ;
-        """
-    )
+        SELECT * FROM private_boards WHERE user_id = %(user_id)s;
+        """, {"user_id": user_id})
 
 
 def get_cards_for_board(board_id):
@@ -251,37 +254,24 @@ def delete_public_board(board_id):
     )
 
 
-def add_new_public_board(board_title):
-    new_board = """ INSERT INTO public_boards (title) 
-                VALUES (%(board_title)s)
-                RETURNING id, title; """
-
-    board = data_manager.execute_select(new_board, {"board_title": board_title}, fetchall=False)
-    return board
-
-
-# def rename_board(new_title, board_id, board):
-#     if board == "private_boards":
-#         rename_title = """ UPDATE private_boards
-#                         SET title = %(new_title)s
-#                         WHERE id= %(board_id)s
-#                         RETURNING id, title; """
-#     else:
-#         rename_title = """ UPDATE public_boards
-#                         SET title = %(new_title)s
-#                         WHERE id= %(board_id)s
-#                         RETURNING id, title; """
-#     renamed_board = data_manager.execute_select(rename_title, {"new_title": new_title, "board_id": board_id},
-#                                                 fetchall=False)
-#     return renamed_board
+def add_new_public_board(board_title, user_id=None):
+    if user_id is None:
+        return data_manager.execute_select(
+            """ INSERT INTO public_boards (title) 
+                VALUES (%(title)s)
+                RETURNING id, title; """, {"title": board_title}, fetchall=False)
+    return data_manager.execute_select(
+        """ INSERT INTO private_boards (user_id, title) 
+            VALUES (%(user_id)s, %(title)s)
+            RETURNING id, title; """, {"user_id": user_id, "title": board_title}, fetchall=False)
 
 
 def rename_board(new_title, board_id, board):
-    rename_title = """ UPDATE %(board)s 
+    rename_title = f""" UPDATE {board}
                         SET title = %(new_title)s 
                         WHERE id= %(board_id)s 
                         RETURNING id, title; """
-    renamed_board = data_manager.execute_select(rename_title, {"board": board, "new_title": new_title, "board_id": board_id},
+    renamed_board = data_manager.execute_select(rename_title, {"new_title": new_title, "board_id": board_id},
                                                 fetchall=False)
     return renamed_board
 

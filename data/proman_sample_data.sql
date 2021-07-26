@@ -16,6 +16,9 @@ SET default_with_oids = false;
 ---
 --- drop tables
 ---
+
+-- TODO users table
+
 DROP TABLE IF EXISTS boards CASCADE;
 DROP TABLE IF EXISTS statuses CASCADE;
 DROP TABLE IF EXISTS public_boards CASCADE;
@@ -26,6 +29,8 @@ DROP TABLE IF EXISTS cards;
 --- create tables
 ---
 
+-- TODO users table
+
 CREATE TABLE statuses (
     id          SERIAL PRIMARY KEY  NOT NULL,
     board_id    INTEGER             NOT NULL,
@@ -34,6 +39,7 @@ CREATE TABLE statuses (
 
 CREATE TABLE private_boards (
     id          SERIAL PRIMARY KEY  NOT NULL UNIQUE,
+    user_id     INTEGER             NOT NULL,
     title       VARCHAR(200)        NOT NULL
 );
 
@@ -53,6 +59,8 @@ CREATE TABLE cards (
 ---
 --- insert data
 ---
+
+-- TODO users table
 
 INSERT INTO statuses VALUES (nextval('cards_id_seq'), 1, 'new');
 INSERT INTO statuses VALUES (nextval('cards_id_seq'), 1, 'in progress');
@@ -84,6 +92,8 @@ INSERT INTO cards VALUES (nextval('cards_id_seq'), 2, 8, 'done card 1', 2);
 --- add constraints
 ---
 
+-- TODO users table
+
 ALTER TABLE ONLY cards
     ADD CONSTRAINT fk_cards_board_id FOREIGN KEY (board_id) REFERENCES public_boards(id);
 
@@ -92,3 +102,6 @@ ALTER TABLE ONLY cards
 
 ALTER TABLE ONLY statuses
     ADD CONSTRAINT fk_cards_status_id FOREIGN KEY (board_id) REFERENCES public_boards(id);
+
+ALTER TABLE ONLY private_boards
+    ADD CONSTRAINT fk_cards_status_id FOREIGN KEY (user_id) REFERENCES users(id);
