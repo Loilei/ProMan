@@ -72,7 +72,7 @@ def check_user_login(email, password):
 def get_session_data(email):
     user_data = data_manager.execute_select(
         """
-        SELECT id, username FROM users
+        SELECT * FROM users
         WHERE email = %(email)s
         ;
         """
@@ -260,11 +260,28 @@ def add_new_public_board(board_title):
     return board
 
 
-def rename_public_board(new_title, board_id):
-    rename_title = """ UPDATE public_boards 
-                    SET title = %(new_title)s 
-                    WHERE id= %(board_id)s 
-                    RETURNING id, title; """
-    renamed_board = data_manager.execute_select(rename_title, {"new_title": new_title, "board_id": board_id},
+# def rename_board(new_title, board_id, board):
+#     if board == "private_boards":
+#         rename_title = """ UPDATE private_boards
+#                         SET title = %(new_title)s
+#                         WHERE id= %(board_id)s
+#                         RETURNING id, title; """
+#     else:
+#         rename_title = """ UPDATE public_boards
+#                         SET title = %(new_title)s
+#                         WHERE id= %(board_id)s
+#                         RETURNING id, title; """
+#     renamed_board = data_manager.execute_select(rename_title, {"new_title": new_title, "board_id": board_id},
+#                                                 fetchall=False)
+#     return renamed_board
+
+
+def rename_board(new_title, board_id, board):
+    rename_title = """ UPDATE %(board)s 
+                        SET title = %(new_title)s 
+                        WHERE id= %(board_id)s 
+                        RETURNING id, title; """
+    renamed_board = data_manager.execute_select(rename_title, {"board": board, "new_title": new_title, "board_id": board_id},
                                                 fetchall=False)
     return renamed_board
+

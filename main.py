@@ -58,8 +58,9 @@ def login():
         password = request.form['password']
         if queries.check_user_login(email, password):
             session_data = queries.get_session_data(email)
-            session['email'] = email
+            session['email'] = session_data['email']
             session['username'] = session_data['username']
+            session['id'] = session_data['id']
             resp = make_response(render_template('login.html'))
             resp.set_cookie("login", "success")
             resp.set_cookie("username", session_data['username'])
@@ -183,11 +184,17 @@ def add_new_board():
 @app.route("/rename-board", methods=["PUT"])
 @json_response
 def rename_board():
-    if request.method == "PUT":
-        new_title = request.json['boardTitle']
-        board_id = request.json['boardId']
-        return queries.rename_public_board(new_title, board_id)
+    board = check_board()
+    new_title = request.json['boardTitle']
+    board_id = request.json['boardId']
+    return queries.rename_board(new_title, board_id, board)
 
+
+def check_board():
+    board = "public_boards"
+    if "id" in session:
+        board = "private_boards"
+    return board
 
 def main():
     app.run(debug=True)
