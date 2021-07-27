@@ -19,7 +19,6 @@ SET default_with_oids = false;
 
 -- TODO users table
 
-DROP TABLE IF EXISTS boards CASCADE;
 DROP TABLE IF EXISTS statuses CASCADE;
 DROP TABLE IF EXISTS public_boards CASCADE;
 DROP TABLE IF EXISTS private_boards CASCADE;
@@ -32,9 +31,10 @@ DROP TABLE IF EXISTS cards;
 -- TODO users table
 
 CREATE TABLE statuses (
-    id          SERIAL PRIMARY KEY  NOT NULL,
-    board_id    INTEGER             NOT NULL,
-    title       VARCHAR(200)        NOT NULL
+    id                 SERIAL PRIMARY KEY  NOT NULL,
+    public_board_id    INTEGER                     ,
+    private_board_id   INTEGER                     ,
+    title              VARCHAR(200)        NOT NULL
 );
 
 CREATE TABLE private_boards (
@@ -62,18 +62,24 @@ CREATE TABLE cards (
 
 -- TODO users table
 
-INSERT INTO statuses VALUES (nextval('cards_id_seq'), 1, 'new');
-INSERT INTO statuses VALUES (nextval('cards_id_seq'), 1, 'in progress');
-INSERT INTO statuses VALUES (nextval('cards_id_seq'), 1, 'testing');
-INSERT INTO statuses VALUES (nextval('cards_id_seq'), 1, 'done');
-INSERT INTO statuses VALUES (nextval('cards_id_seq'), 2, 'new');
-INSERT INTO statuses VALUES (nextval('cards_id_seq'), 2, 'in progress');
-INSERT INTO statuses VALUES (nextval('cards_id_seq'), 2, 'testing');
-INSERT INTO statuses VALUES (nextval('cards_id_seq'), 2, 'done');
+INSERT INTO statuses VALUES (nextval('cards_id_seq'), 1, null, 'new');
+INSERT INTO statuses VALUES (nextval('cards_id_seq'), 1, null, 'in progress');
+INSERT INTO statuses VALUES (nextval('cards_id_seq'), 1, null, 'testing');
+INSERT INTO statuses VALUES (nextval('cards_id_seq'), 1, null, 'done');
+INSERT INTO statuses VALUES (nextval('cards_id_seq'), 2, null, 'new');
+INSERT INTO statuses VALUES (nextval('cards_id_seq'), 2, null, 'in progress');
+INSERT INTO statuses VALUES (nextval('cards_id_seq'), 2, null, 'testing');
+INSERT INTO statuses VALUES (nextval('cards_id_seq'), 2, null, 'done');
+INSERT INTO statuses VALUES (nextval('cards_id_seq'), null, 1, 'new');
+INSERT INTO statuses VALUES (nextval('cards_id_seq'), null, 1, 'in progress');
+INSERT INTO statuses VALUES (nextval('cards_id_seq'), null, 1, 'testing');
+INSERT INTO statuses VALUES (nextval('cards_id_seq'), null, 1, 'done');
 
 
 INSERT INTO public_boards(title) VALUES ('Board 1');
 INSERT INTO public_boards(title) VALUES ('Board 2');
+
+INSERT INTO private_boards(user_id, title) VALUES (4, 'Board 1');
 
 INSERT INTO cards VALUES (nextval('cards_id_seq'), 1, 1, 'new card 1', 1);
 INSERT INTO cards VALUES (nextval('cards_id_seq'), 1, 1, 'new card 2', 2);
@@ -101,7 +107,10 @@ ALTER TABLE ONLY cards
     ADD CONSTRAINT fk_cards_status_id FOREIGN KEY (status_id) REFERENCES statuses(id);
 
 ALTER TABLE ONLY statuses
-    ADD CONSTRAINT fk_cards_status_id FOREIGN KEY (board_id) REFERENCES public_boards(id);
+    ADD CONSTRAINT fk_cards_status_id FOREIGN KEY (public_board_id) REFERENCES public_boards(id);
+
+ALTER TABLE ONLY statuses
+    ADD CONSTRAINT fk_cards_status_id FOREIGN KEY (private_board_id) REFERENCES private_boards(id);
 
 ALTER TABLE ONLY private_boards
     ADD CONSTRAINT fk_cards_status_id FOREIGN KEY (user_id) REFERENCES users(id);

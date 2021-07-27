@@ -91,7 +91,8 @@ def logout():
 @app.route("/get_statuses/<int:board_id>")
 @json_response
 def get_statuses(board_id):
-    return queries.get_statuses(board_id)
+    board = check_board()
+    return queries.get_statuses(board, board_id)
 
 
 @app.route("/rename_column", methods=["PUT"])

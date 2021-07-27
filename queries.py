@@ -83,15 +83,22 @@ def get_session_data(email):
     return user_data[0]
 
 
-def get_statuses(board_id):
-    matching_cards = data_manager.execute_select(
+def get_statuses(board, board_id):
+    if board == "private_boards":
+        return data_manager.execute_select(
+            """
+            SELECT * FROM statuses
+            WHERE private_board_id = %(board_id)s
+            ORDER BY id;
+            """
+            , {"board_id": board_id})
+    return data_manager.execute_select(
         """
         SELECT * FROM statuses
-        WHERE board_id = %(board_id)s
+        WHERE public_board_id = %(board_id)s
         ORDER BY id;
         """
         , {"board_id": board_id})
-    return matching_cards
 
 
 def rename_status(column_id, new_title):
