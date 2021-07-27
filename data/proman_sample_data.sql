@@ -22,7 +22,7 @@ SET default_with_oids = false;
 DROP TABLE IF EXISTS statuses CASCADE;
 DROP TABLE IF EXISTS public_boards CASCADE;
 DROP TABLE IF EXISTS private_boards CASCADE;
-DROP TABLE IF EXISTS cards;
+DROP TABLE IF EXISTS cards CASCADE;
 
 ---
 --- create tables
@@ -38,22 +38,23 @@ CREATE TABLE statuses (
 );
 
 CREATE TABLE private_boards (
-    id          SERIAL PRIMARY KEY  NOT NULL UNIQUE,
+    id          SERIAL PRIMARY KEY  NOT NULL,
     user_id     INTEGER             NOT NULL,
     title       VARCHAR(200)        NOT NULL
 );
 
 CREATE TABLE public_boards (
-    id          SERIAL PRIMARY KEY  NOT NULL UNIQUE,
+    id          SERIAL PRIMARY KEY  NOT NULL,
     title       VARCHAR(200)        NOT NULL
 );
 
 CREATE TABLE cards (
-    id          SERIAL PRIMARY KEY  NOT NULL,
-    board_id    INTEGER             NOT NULL,
-    status_id   INTEGER             NOT NULL,
-    title       VARCHAR (200)       NOT NULL,
-    card_order  INTEGER             NOT NULL
+    id                 SERIAL PRIMARY KEY  NOT NULL,
+    public_board_id    INTEGER                     ,
+    private_board_id   INTEGER                     ,
+    status_id          INTEGER             NOT NULL,
+    title              VARCHAR (200)       NOT NULL,
+    card_order         INTEGER             NOT NULL
 );
 
 ---
@@ -81,18 +82,22 @@ INSERT INTO public_boards(title) VALUES ('Board 2');
 
 INSERT INTO private_boards(user_id, title) VALUES (4, 'Board 1');
 
-INSERT INTO cards VALUES (nextval('cards_id_seq'), 1, 1, 'new card 1', 1);
-INSERT INTO cards VALUES (nextval('cards_id_seq'), 1, 1, 'new card 2', 2);
-INSERT INTO cards VALUES (nextval('cards_id_seq'), 1, 2, 'in progress card', 1);
-INSERT INTO cards VALUES (nextval('cards_id_seq'), 1, 3, 'planning', 1);
-INSERT INTO cards VALUES (nextval('cards_id_seq'), 1, 4, 'done card 1', 1);
-INSERT INTO cards VALUES (nextval('cards_id_seq'), 1, 4, 'done card 1', 2);
-INSERT INTO cards VALUES (nextval('cards_id_seq'), 2, 5, 'new card 1', 1);
-INSERT INTO cards VALUES (nextval('cards_id_seq'), 2, 5, 'new card 2', 2);
-INSERT INTO cards VALUES (nextval('cards_id_seq'), 2, 6, 'in progress card', 1);
-INSERT INTO cards VALUES (nextval('cards_id_seq'), 2, 7, 'planning', 1);
-INSERT INTO cards VALUES (nextval('cards_id_seq'), 2, 8, 'done card 1', 1);
-INSERT INTO cards VALUES (nextval('cards_id_seq'), 2, 8, 'done card 1', 2);
+INSERT INTO cards VALUES (nextval('cards_id_seq'), 1, null, 1, 'new card 1', 1);
+INSERT INTO cards VALUES (nextval('cards_id_seq'), 1, null, 1, 'new card 2', 2);
+INSERT INTO cards VALUES (nextval('cards_id_seq'), 1, null, 2, 'in progress card', 1);
+INSERT INTO cards VALUES (nextval('cards_id_seq'), 1, null, 3, 'planning', 1);
+INSERT INTO cards VALUES (nextval('cards_id_seq'), 1, null, 4, 'done card 1', 1);
+INSERT INTO cards VALUES (nextval('cards_id_seq'), 1, null, 4, 'done card 1', 2);
+INSERT INTO cards VALUES (nextval('cards_id_seq'), 2, null, 5, 'new card 1', 1);
+INSERT INTO cards VALUES (nextval('cards_id_seq'), 2, null, 5, 'new card 2', 2);
+INSERT INTO cards VALUES (nextval('cards_id_seq'), 2, null, 6, 'in progress card', 1);
+INSERT INTO cards VALUES (nextval('cards_id_seq'), 2, null, 7, 'planning', 1);
+INSERT INTO cards VALUES (nextval('cards_id_seq'), 2, null, 8, 'done card 1', 1);
+INSERT INTO cards VALUES (nextval('cards_id_seq'), 2, null, 8, 'done card 1', 2);
+INSERT INTO cards VALUES (nextval('cards_id_seq'), null, 1, 9, 'col 1 card', 1);
+INSERT INTO cards VALUES (nextval('cards_id_seq'), null, 1, 10, 'col 2 card', 1);
+INSERT INTO cards VALUES (nextval('cards_id_seq'), null, 1, 11, 'col 3 card', 1);
+INSERT INTO cards VALUES (nextval('cards_id_seq'), null, 1, 12, 'col 4 card', 2);
 
 ---
 --- add constraints
@@ -101,16 +106,19 @@ INSERT INTO cards VALUES (nextval('cards_id_seq'), 2, 8, 'done card 1', 2);
 -- TODO users table
 
 ALTER TABLE ONLY cards
-    ADD CONSTRAINT fk_cards_board_id FOREIGN KEY (board_id) REFERENCES public_boards(id);
+    ADD CONSTRAINT fk_cards_public_board_id FOREIGN KEY (public_board_id) REFERENCES public_boards(id);
+
+ALTER TABLE ONLY cards
+    ADD CONSTRAINT fk_cards_private_board_id FOREIGN KEY (private_board_id) REFERENCES private_boards(id);
 
 ALTER TABLE ONLY cards
     ADD CONSTRAINT fk_cards_status_id FOREIGN KEY (status_id) REFERENCES statuses(id);
 
 ALTER TABLE ONLY statuses
-    ADD CONSTRAINT fk_cards_status_id FOREIGN KEY (public_board_id) REFERENCES public_boards(id);
+    ADD CONSTRAINT fk_statuses_public_board_id FOREIGN KEY (public_board_id) REFERENCES public_boards(id);
 
 ALTER TABLE ONLY statuses
-    ADD CONSTRAINT fk_cards_status_id FOREIGN KEY (private_board_id) REFERENCES private_boards(id);
+    ADD CONSTRAINT fk_statuses_private_board_id FOREIGN KEY (private_board_id) REFERENCES private_boards(id);
 
 ALTER TABLE ONLY private_boards
-    ADD CONSTRAINT fk_cards_status_id FOREIGN KEY (user_id) REFERENCES users(id);
+    ADD CONSTRAINT fk_private_boards_user_id FOREIGN KEY (user_id) REFERENCES users(id);
