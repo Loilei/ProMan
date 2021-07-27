@@ -8,7 +8,7 @@ export let cardsManager = {
         for (let card of cards) {
             const cardBuilder = htmlFactory(htmlTemplates.card);
             const content = cardBuilder(card)
-            domManager.addChild(`.board${card.board_id}-column-content[data-column-id="${card.status_id}"]`,
+            domManager.addChild(`.board${boardId}-column-content[data-column-id="${card.status_id}"]`,
                 content)
             domManager.addEventListener(`.card-remove[id="removeCard${card.id}"]`, "click",
                 deleteButtonHandler)

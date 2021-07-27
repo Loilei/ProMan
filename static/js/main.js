@@ -18,18 +18,19 @@ function initCreateNewBoard(){
   )
 }
 
-function getPrivatePage(){
+export function checkPageStatus(){
     let cookies = document.cookie.split('; ')
     if ("login=success" === cookies[0]){
         console.log(document.cookie)
+        return "private"
     }
     else {
-        console.log("Cookies doesn't exist")
+        return "public"
     }
 }
 
 
 init();
-getPrivatePage()
+checkPageStatus()
 initCreateNewBoard();
 
