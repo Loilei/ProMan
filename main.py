@@ -4,7 +4,6 @@ from datetime import timedelta
 from flask import Flask, render_template, url_for, session, request, flash, redirect, make_response
 from util import json_response, hash_password
 
-
 import queries
 
 app = Flask(__name__)
@@ -26,7 +25,7 @@ def get_boards():
     """
     All the boards
     """
-    board = check_board()
+    board = check_board_status()[0]
     if board == "private_boards":
         user_id = session['id']
         return queries.get_boards(user_id)
@@ -40,8 +39,8 @@ def get_cards_for_board(board_id: int):
     All cards that belongs to a board
     :param board_id: id of the parent board
     """
-    board = check_board()
-    return queries.get_cards(board, board_id)
+    checking_id = check_board_status()[1]
+    return queries.get_cards(checking_id, board_id)
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -92,8 +91,8 @@ def logout():
 @app.route("/get_statuses/<int:board_id>")
 @json_response
 def get_statuses(board_id):
-    board = check_board()
-    return queries.get_statuses(board, board_id)
+    checking_id = check_board_status()[1]
+    return queries.get_statuses(checking_id, board_id)
 
 
 @app.route("/rename_column", methods=["PUT"])
@@ -106,16 +105,13 @@ def rename_status():
 
 @app.route("/create-new-card", methods=["POST"])
 def create_new_card():
-    board = check_board()
-    checking_id = "public_board_id"
-    if board == "private_boards":
-        checking_id = "private_board_id"
+    checking_id = check_board_status()[1]
     data = request.get_json()
     title = data["title"]
     column_id = data["column_id"]
     board_id = data["board_id"]
     card_number = queries.is_board_empty(column_id, board_id, checking_id)
-    if card_number == None:
+    if card_number is None:
         card_number = 1
     queries.save_card(checking_id, board_id, column_id, title, card_number)
 
@@ -158,10 +154,7 @@ def get_latest_column_id():
 @app.route("/create-new-column", methods=["POST"])
 @json_response
 def create_new_column():
-    checking_id = "public_board_id"
-    board = check_board()
-    if board == "private_boards":
-        checking_id = "private_board_id"
+    checking_id = check_board_status()[1]
     column_id = request.json['column_id']
     board_id = request.json['board_id']
     title = request.json['title']
@@ -177,29 +170,25 @@ def delete_column(column_id):
 @app.route("/delete-board/<board_id>")
 @json_response
 def delete_board(board_id):
-    checking_id = "public_board_id"
-    board = check_board()
-    if board == "private_boards":
-        checking_id = "private_board_id"
+    board = check_board_status()[0]
+    checking_id = check_board_status()[1]
     return queries.delete_board(board, checking_id, board_id)
 
 
 @app.route("/get-first-column-from-board/<board_id>")
 @json_response
 def get_first_column_from_board(board_id):
-    checking_id = "public_board_id"
-    board = check_board()
-    if board == "private_boards":
-        checking_id = "private_board_id"
+    checking_id = check_board_status()[1]
     try:
         return queries.get_first_column_from_board(checking_id, board_id)
     except IndexError:
         return 1
 
+
 @app.route("/create-board", methods=["POST"])
 @json_response
 def add_new_board():
-    board = check_board()
+    board = check_board_status()[0]
     board_title = request.json['boardTitle']
     if board == "private_boards":
         user_id = session['id']
@@ -210,17 +199,20 @@ def add_new_board():
 @app.route("/rename-board", methods=["PUT"])
 @json_response
 def rename_board():
-    board = check_board()
+    board = check_board_status()[0]
     new_title = request.json['boardTitle']
     board_id = request.json['boardId']
     return queries.rename_board(new_title, board_id, board)
 
 
-def check_board():
+def check_board_status():
     board = "public_boards"
+    checking_id = "public_board_id"
     if "id" in session:
         board = "private_boards"
-    return board
+        checking_id = "private_board_id"
+    return board, checking_id
+
 
 def main():
     app.run(debug=True)

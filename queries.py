@@ -36,19 +36,11 @@ def get_boards(user_id=None):
         """, {"user_id": user_id})
 
 
-def get_cards(board, board_id):
-    if board == "private_boards":
-        return data_manager.execute_select(
-            """
-            SELECT * FROM cards
-            WHERE private_board_id = %(board_id)s
-            ORDER BY card_order;
-            """
-            , {"board_id": board_id})
+def get_cards(checking_id, board_id):
     return data_manager.execute_select(
-            """
+            f"""
             SELECT * FROM cards
-            WHERE public_board_id = %(board_id)s
+            WHERE {checking_id} = %(board_id)s
             ORDER BY card_order;
             """
             , {"board_id": board_id})
@@ -81,26 +73,17 @@ def get_session_data(email):
     user_data = data_manager.execute_select(
         """
         SELECT * FROM users
-        WHERE email = %(email)s
-        ;
+        WHERE email = %(email)s;
         """
         , {"email": email})
     return user_data[0]
 
 
-def get_statuses(board, board_id):
-    if board == "private_boards":
-        return data_manager.execute_select(
-            """
-            SELECT * FROM statuses
-            WHERE private_board_id = %(board_id)s
-            ORDER BY id;
-            """
-            , {"board_id": board_id})
+def get_statuses(checking_id, board_id):
     return data_manager.execute_select(
-        """
+        f"""
         SELECT * FROM statuses
-        WHERE public_board_id = %(board_id)s
+        WHERE {checking_id} = %(board_id)s
         ORDER BY id;
         """
         , {"board_id": board_id})
