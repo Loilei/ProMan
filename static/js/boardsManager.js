@@ -174,7 +174,7 @@ async function saveColumnTitle(columnId, newColumnTitle, boardId) {
 }
 
 function deleteBoard(clickEvent){
-    const boardId = clickEvent.path[1].attributes[1].value
+    const boardId = clickEvent.path[1].attributes['data-board-id'].value
     dataHandler.deleteBoard(boardId)
     clickEvent.path[3].hidden = true
 }

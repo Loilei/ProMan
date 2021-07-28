@@ -177,7 +177,11 @@ def delete_column(column_id):
 @app.route("/delete-board/<board_id>")
 @json_response
 def delete_board(board_id):
-    return queries.delete_board(board_id)
+    checking_id = "public_board_id"
+    board = check_board()
+    if board == "private_boards":
+        checking_id = "private_board_id"
+    return queries.delete_board(board, checking_id, board_id)
 
 
 @app.route("/get-first-column-from-board/<board_id>")

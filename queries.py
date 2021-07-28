@@ -227,36 +227,36 @@ def get_first_column_from_board(checking_id, board_id):
             """, {"board_id": board_id})[0]['id']
 
 
-def delete_public_board(board_id):
+def delete_board(board, checking_id, board_id):
     cards_exist = data_manager.execute_select(
-        """
+        f"""
         SELECT * FROM cards
-        WHERE board_id = %(board_id)s
+        WHERE {checking_id} = %(board_id)s
         """, {"board_id": board_id}
     )
     if len(cards_exist) != 0:
         data_manager.execute_update(
-            """
+            f"""
             DELETE FROM cards
-            WHERE board_id = %(board_id)s
+            WHERE {checking_id} = %(board_id)s
             """, {"board_id": board_id}
         )
     statuses_exist = data_manager.execute_select(
-        """
+        f"""
         SELECT * FROM statuses
-        WHERE board_id = %(board_id)s
+        WHERE {checking_id} = %(board_id)s
         """, {"board_id": board_id}
     )
     if len(statuses_exist) != 0:
         data_manager.execute_update(
-            """
+            f"""
             DELETE FROM statuses
-            WHERE board_id = %(board_id)s
+            WHERE {checking_id} = %(board_id)s
             """, {"board_id": board_id}
         )
     data_manager.execute_update(
-        """
-        DELETE FROM public_boards
+        f"""
+        DELETE FROM {board}
         WHERE id = %(board_id)s
         """, {"board_id": board_id}
     )
