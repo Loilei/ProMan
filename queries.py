@@ -12,11 +12,8 @@ def get_card_status(status_id):
     status = data_manager.execute_select(
         """
         SELECT * FROM statuses s
-        WHERE s.id = %(status_id)s
-        ;
-        """
-        , {"status_id": status_id})
-
+        WHERE s.id = %(status_id)s;
+        """, {"status_id": status_id})
     return status
 
 
@@ -61,11 +58,8 @@ def check_user_login(email, password):
     user_password = data_manager.execute_select(
         """
         SELECT password FROM users
-        WHERE email = %(email)s
-        ;
-        """
-        , {"email": email})
-
+        WHERE email = %(email)s;
+        """, {"email": email})
     return bcrypt.checkpw(password.encode('UTF-8'), user_password[0]["password"].encode('UTF-8'))
 
 
@@ -74,8 +68,7 @@ def get_session_data(email):
         """
         SELECT * FROM users
         WHERE email = %(email)s;
-        """
-        , {"email": email})
+        """, {"email": email})
     return user_data[0]
 
 
@@ -85,8 +78,7 @@ def get_statuses(checking_id, board_id):
         SELECT * FROM statuses
         WHERE {checking_id} = %(board_id)s
         ORDER BY id;
-        """
-        , {"board_id": board_id})
+        """, {"board_id": board_id})
 
 
 def rename_status(column_id, new_title):
@@ -125,10 +117,8 @@ def save_card(checking_id, board_id, column_id, title, card_number):
 def get_latest_card_id():
     return data_manager.execute_select(
         """
-        SELECT max(id) FROM cards
-        ;
-        """
-    )[0]['max']
+        SELECT max(id) FROM cards;
+        """)[0]['max']
 
 
 def delete_card(card_id):
@@ -160,10 +150,8 @@ def update_card_position(card_id, card_order, column_id):
 def get_latest_column_id():
     return data_manager.execute_select(
         """
-        SELECT max(id) FROM statuses
-        ;
-        """
-    )[0]['max']
+        SELECT max(id) FROM statuses;
+        """)[0]['max']
 
 
 def add_new_column(checking_id, column_id, board_id, title):
