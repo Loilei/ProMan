@@ -158,10 +158,14 @@ def get_latest_column_id():
 @app.route("/create-new-column", methods=["POST"])
 @json_response
 def create_new_column():
+    checking_id = "public_board_id"
+    board = check_board()
+    if board == "private_boards":
+        checking_id = "private_board_id"
     column_id = request.json['column_id']
     board_id = request.json['board_id']
     title = request.json['title']
-    return queries.add_new_column(column_id, board_id, title)
+    return queries.add_new_column(checking_id, column_id, board_id, title)
 
 
 @app.route("/delete-column/<column_id>")
@@ -173,7 +177,7 @@ def delete_column(column_id):
 @app.route("/delete-board/<board_id>")
 @json_response
 def delete_board(board_id):
-    return queries.delete_public_board(board_id)
+    return queries.delete_board(board_id)
 
 
 @app.route("/get-first-column-from-board/<board_id>")

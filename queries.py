@@ -183,13 +183,13 @@ def get_latest_column_id():
     )[0]['max']
 
 
-def add_new_column(column_id, board_id, title):
-    new_column = """
+def add_new_column(checking_id, column_id, board_id, title):
+    new_column = f"""
         INSERT INTO statuses 
-        (id, board_id, title, column_order)
+        (id, {checking_id}, title)
         VALUES 
-        (%(column_id)s, %(board_id)s, %(title)s, 1)
-        RETURNING id, board_id, title, column_order;
+        (%(column_id)s, %(board_id)s, %(title)s)
+        RETURNING id, {checking_id}, title;
         """
     column = data_manager.execute_select(new_column, {"column_id": column_id, "board_id": board_id, "title": title})
     return column
