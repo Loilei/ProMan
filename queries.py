@@ -39,8 +39,7 @@ def get_cards(checking_id, board_id):
             SELECT * FROM cards
             WHERE {checking_id} = %(board_id)s
             ORDER BY card_order;
-            """
-            , {"board_id": board_id})
+            """, {"board_id": board_id})
 
 
 def save_user(username, email, hashed_password):
@@ -253,4 +252,3 @@ def rename_board(new_title, board_id, board):
     renamed_board = data_manager.execute_select(rename_title, {"new_title": new_title, "board_id": board_id},
                                                 fetchall=False)
     return renamed_board
-
