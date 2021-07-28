@@ -117,26 +117,26 @@ def rename_status(column_id, new_title):
     return renamed_status
 
 
-def is_board_empty(column_id, board_id):
+def is_board_empty(column_id, board_id, checking_id):
     max_card_order = data_manager.execute_select(
-        """
+        f"""
         SELECT MAX(cards.card_order)
         FROM cards
         JOIN statuses
         ON cards.status_id = statuses.id
-        WHERE cards.board_id = %(board_id)s and statuses.id = %(column_id)s;
+        WHERE cards.{checking_id} = %(board_id)s and statuses.id = %(column_id)s;
         """, {"board_id": board_id, "column_id": column_id})[0]['max']
     return max_card_order
 
 
-def save_card(title, column_id, board_id, card_number):
+def save_card(checking_id, board_id, column_id, title, card_number):
     data_manager.execute_update(
-        """
+        f"""
         INSERT INTO cards 
-        (board_id, title, status_id, card_order)
+        ({checking_id}, status_id, title, card_order)
         VALUES 
-        (%(board_id)s, %(title)s, %(status_id)s, %(card_order)s); 
-        """, {"board_id": board_id, "title": title, "status_id": column_id, "card_order": card_number})
+        (%(board_id)s, %(status_id)s, %(title)s, %(card_order)s); 
+        """, {"board_id": board_id, "status_id": column_id, "title": title,  "card_order": card_number})
 
 
 def get_latest_card_id():
@@ -217,18 +217,14 @@ def delete_column(column_id):
     )
 
 
-def get_first_column_from_board(board_id):
-    user_username = data_manager.execute_select(
-        """
-        SELECT id
-        FROM statuses
-        WHERE board_id = %(board_id)s
-        ORDER BY column_order
-        LIMIT 1
-        ;
-        """, {"board_id": board_id})
-
-    return user_username[0]['id']
+def get_first_column_from_board(checking_id, board_id):
+    return data_manager.execute_select(f"""
+                SELECT id
+                FROM statuses
+                WHERE {checking_id} = %(board_id)s
+                ORDER BY id
+                LIMIT 1;
+            """, {"board_id": board_id})[0]['id']
 
 
 def delete_public_board(board_id):

@@ -106,14 +106,18 @@ def rename_status():
 
 @app.route("/create-new-card", methods=["POST"])
 def create_new_card():
+    board = check_board()
+    checking_id = "public_board_id"
+    if board == "private_boards":
+        checking_id = "private_board_id"
     data = request.get_json()
     title = data["title"]
     column_id = data["column_id"]
     board_id = data["board_id"]
-    card_number = queries.is_board_empty(column_id, board_id)
+    card_number = queries.is_board_empty(column_id, board_id, checking_id)
     if card_number == None:
         card_number = 1
-    queries.save_card(title, column_id, board_id, card_number)
+    queries.save_card(checking_id, board_id, column_id, title, card_number)
 
 
 @app.route("/get-latest-card-id")
@@ -175,8 +179,14 @@ def delete_board(board_id):
 @app.route("/get-first-column-from-board/<board_id>")
 @json_response
 def get_first_column_from_board(board_id):
-    return queries.get_first_column_from_board(board_id)
-
+    checking_id = "public_board_id"
+    board = check_board()
+    if board == "private_boards":
+        checking_id = "private_board_id"
+    try:
+        return queries.get_first_column_from_board(checking_id, board_id)
+    except IndexError:
+        return 1
 
 @app.route("/create-board", methods=["POST"])
 @json_response
